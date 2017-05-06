@@ -1,0 +1,149 @@
+<?
+
+/* @var $this \yii\web\View */
+/* @var $content string */
+
+use yii\helpers\Html;
+use yii\bootstrap\Nav;
+use yii\bootstrap\NavBar;
+use yii\widgets\Breadcrumbs;
+use app\assets\AdminAsset;
+
+AdminAsset::register($this);
+
+?>
+<?php $this->beginPage() ?>
+<!DOCTYPE html>
+<html lang="<?= Yii::$app->language ?>">
+<head>
+    <meta charset="<?= Yii::$app->charset ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <?= Html::csrfMetaTags() ?>
+    <title><?= Html::encode($this->title) ?></title>
+    <?php $this->head() ?>
+</head>
+<body>
+<?php $this->beginBody() ?>
+<div id="wrapper">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul class="nav metismenu" id="side-menu">
+                <li class="nav-header">
+                    <div class="dropdown profile-element">
+                        <span>
+                            <img alt="image" class="img-circle" src="/assets/admin/img/logo.jpg" />
+                        </span>
+                        <a data-toggle="dropdown" class="dropdown-toggle" aria-expanded="false" href="#">
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Tany Star</strong><b class="caret"></b></span>
+                        </a>
+                        <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                            <li><a href="profile.html">Profile</a></li>
+                            <li><a href="contacts.html">Contacts</a></li>
+                            <li><a href="mailbox.html">Mailbox</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/logout/">Выход</a></li>
+                        </ul>
+                    </div>
+                    <div class="logo-element">
+                        PWD
+                    </div>
+                </li>
+
+                <li class="active">
+                    <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Маркетинг</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="/admin/clients/">Клиенты</a></li>
+                        <li><a href="/admin/clients_groups/">Группы клиентов</a></li>
+                        <li><a href="/admin/loyalty_programs/">Программы лояльности</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="/site/reports/"><i class="fa fa-table"></i> <span class="nav-label">Отчеты</span></a>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">Портал</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse">
+                        <li class=""><a href="/site/portal-settings/">Настройки интеграции с Bitrix24</a></li>
+                        <li><a href="search_results.html">Инструкции</a></li>
+                        <li><a href="login.html">Авторизация</a></li>
+                        <li><a href="forgot_password.html">Забыли пароль</a></li>
+                        <li><a href="register.html">Регистрация</a></li>
+                        <li><a href="404.html">404 Page</a></li>
+                        <li><a href="500.html">500 Page</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom">
+            <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                <div class="navbar-header">
+                    <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+                    <form role="search" class="navbar-form-custom" action="search_results.html">
+                        <div class="form-group">
+                            <input type="text" placeholder="Поиск..." class="form-control" name="top-search" id="top-search">
+                        </div>
+                    </form>
+                </div>
+                <ul class="nav navbar-top-links navbar-right"><?
+                    if( Yii::$app->user->isGuest ){
+                        ?><li>
+                            <a href="/auth/">
+                                Вход
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/registration/">
+                                Регистрация
+                            </a>
+                        </li><?
+                    }
+                    else{
+                        ?><li>
+                            <a href="/logout/">
+                                <i class="fa fa-sign-out"></i> Выход
+                            </a>
+                        </li><?
+                    }
+                    ?></ul>
+
+            </nav>
+        </div>
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-9">
+                <h1><?=Html::encode($this->title)?></h1>
+                <?= Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    'homeLink' => ['label' => 'Главная', 'url' => '/admin/'],
+                    'activeItemTemplate' => "<li class=\"active\"><strong>{link}</strong></li>\n",
+                    'tag' => 'ol'
+                ]) ?>
+            </div>
+        </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox-content">
+                        <?= $content ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+            <div class="pull-right">
+            </div>
+            <div>
+                <strong>Copyright</strong> FLOWERCRM 2017 - <?=date('Y')?>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php $this->endBody() ?>
+</body>
+</html>
+<?php $this->endPage() ?>

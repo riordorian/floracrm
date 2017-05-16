@@ -15,6 +15,8 @@ use Yii;
  * @property string $PHONE
  * @property string $EMAIL
  * @property string $DESCRIPTION
+ *
+ * @property ClientsClientsGroups[] $clientsClientsGroups
  */
 class Clients extends \yii\db\ActiveRecord
 {
@@ -32,7 +34,7 @@ class Clients extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['NAME', 'TYPE', 'BIRTHDAY', 'PHONE', 'EMAIL', 'DESCRIPTION'], 'required'],
+            [['NAME', 'TYPE', 'PHONE'], 'required'],
             [['BIRTHDAY'], 'safe'],
             [['DESCRIPTION'], 'string'],
             [['NAME'], 'string', 'max' => 100],
@@ -49,14 +51,23 @@ class Clients extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'ID' => 'ID',
-            'NAME' => 'Name',
-            'TYPE' => 'Type',
-            'GENDER' => 'Gender',
-            'BIRTHDAY' => 'Birthday',
-            'PHONE' => 'Phone',
+            'ID' => 'Id',
+            'NAME' => 'Имя',
+            'TYPE' => 'Тип клиента',
+            'GENDER' => 'Пол',
+            'BIRTHDAY' => 'Дата рождения',
+            'PHONE' => 'Телефон',
             'EMAIL' => 'Email',
-            'DESCRIPTION' => 'Description',
+            'DESCRIPTION' => 'Описание',
+            'CLIENT_GROUP' => 'Группа',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientsClientsGroups()
+    {
+        return $this->hasOne(ClientsClientsGroups::className(), ['CLIENT_ID' => 'ID']);
     }
 }

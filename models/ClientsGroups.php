@@ -10,6 +10,8 @@ use Yii;
  * @property integer $ID
  * @property string $NAME
  * @property integer $PERCENT
+ *
+ * @property ClientsClientsGroups[] $clientsClientsGroups
  */
 class ClientsGroups extends \yii\db\ActiveRecord
 {
@@ -43,5 +45,19 @@ class ClientsGroups extends \yii\db\ActiveRecord
             'NAME' => 'Name',
             'PERCENT' => 'Percent',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    /*public function getClientsClientsGroups()
+    {
+        return $this->hasMany(ClientsClientsGroups::className(), ['CLIENTS_GROUPS_ID' => 'ID']);
+    }*/
+
+    public function getClients()
+    {
+        return $this->hasMany(Clients::className(), ['ID' => 'CLIENT_ID'])
+            ->viaTable('clients_clients_groups', ['CLIENTS_GROUPS_ID' => 'ID']);
     }
 }

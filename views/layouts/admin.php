@@ -10,7 +10,6 @@ use yii\widgets\Breadcrumbs;
 use app\assets\AdminAsset;
 
 AdminAsset::register($this);
-
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -22,7 +21,7 @@ AdminAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body>
+<body class="<?=$this->context->bodyClass?>">
 <?php $this->beginBody() ?>
 <div id="wrapper">
     <nav class="navbar-default navbar-static-side" role="navigation">
@@ -45,7 +44,7 @@ AdminAsset::register($this);
                         </ul>
                     </div>
                     <div class="logo-element">
-                        PWD
+                        <img alt="image" class="img-circle" src="/assets/admin/img/logo.jpg" />
                     </div>
                 </li>
 
@@ -114,7 +113,7 @@ AdminAsset::register($this);
         </div>
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-9">
-                <h1><?=Html::encode($this->title)?></h1>
+                <h1><?=Html::encode($this->title)?> <?=( !empty($this->context->listCount) ) ? '(' . $this->context->listCount . ')' : ''?></h1>
                 <?= Breadcrumbs::widget([
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                     'homeLink' => ['label' => 'Главная', 'url' => '/admin/'],

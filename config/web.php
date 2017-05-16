@@ -105,7 +105,8 @@ $config = [
                 '<action:>' => 'site/<action>',
 
                 '/admin/' => 'admin/index',
-                '/admin/<action:>' => 'admin/<action>'
+                '/admin/clients/' => 'clients/index',
+                '/admin/clients/<action:>' => 'clients/<action>'
             ],
         ],
         'authManager' => [

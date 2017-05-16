@@ -20,7 +20,7 @@ class AdminController extends Controller
      *
      * @return string
      */
-    public function actionClients()
+   /* public function actionClients()
     {
         $model = new Clients();
         $dataProvider = new ActiveDataProvider([
@@ -41,7 +41,7 @@ class AdminController extends Controller
         ]);
 
         return $this->render('clients/clients', ['dataProvider' => $dataProvider]);
-    }
+    }*/
 
     /**
      * Display admin homepage.

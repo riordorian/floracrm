@@ -8,22 +8,27 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="clients-groups-search">
+<div class="clients-groups-search js-reload-elems">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-    ]); ?>
+    ]);
+    ?>
 
-    <?= $form->field($model, 'ID') ?>
+    <div class="row">
+        <?= $form->field($model, 'NAME', [
+                'options' => [
+                    'class' => 'col-md-4'
+                ]
+            ]
+        )->textInput(['class' => 'form-control js-reload-field']) ?>
 
-    <?= $form->field($model, 'NAME') ?>
-
-    <?= $form->field($model, 'PERCENT') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+        
+        <div class="form-group col-md-2">
+            <label class="control-label">&nbsp;</label><br>
+            <?= Html::a('Сбросить', ['index'], ['class' => 'btn btn-default']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -16,26 +16,35 @@ $this->context->bodyClass = 'animated_fill-none';
 
     ?><p>
         <?= Html::a('<i class="fa fa-plus"></i>', ['create'], ['class' => 'btn btn-primary btn-lg btn-circle btn-add']) ?>
-    </p><?
+    </p>
 
-    Pjax::begin();
+    <div class="js-replaceable-container"><?
+        Pjax::begin();
         echo GridView::widget([
             'dataProvider' => $dataProvider,
             'summary' => false,
             'columns' => [
                 ['class' => 'yii\grid\SerialColumn'],
                 'NAME',
-                'TYPE',
+                [
+                    'attribute' => 'CLIENT_TYPE',
+                    'value' => 'clientsClientsTypes.ClientTypeName',
+                ],
                 'PHONE',
                 [
                     'attribute' => 'CLIENT_GROUP',
                     'value' => 'clientsClientsGroups.GroupName',
                 ],
-                ['class' => 'yii\grid\ActionColumn'],
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['class' => 'text-right column column_actions']
+                ],
             ],
             'tableOptions' => [
                 'class' => 'table table-striped'
             ],
         ]);
-    Pjax::end();
-?></div>
+        Pjax::end();
+    ?></div>
+
+</div>

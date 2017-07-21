@@ -7,19 +7,17 @@ use yii\widgets\DetailView;
 /* @var $model app\models\ClientsGroups */
 
 $this->title = $model->NAME;
-$this->params['breadcrumbs'][] = ['label' => 'Clients Groups', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Группы клиентов', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="clients-groups-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->ID], [
+        <?= Html::a('Обновить', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->ID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Вы уверены, что хотите удалить группу клиентов?',
                 'method' => 'post',
             ],
         ]) ?>

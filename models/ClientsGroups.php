@@ -13,7 +13,7 @@ use Yii;
  *
  * @property ClientsClientsGroups[] $clientsClientsGroups
  */
-class ClientsGroups extends \yii\db\ActiveRecord
+class ClientsGroups extends Prototype
 {
     /**
      * @inheritdoc
@@ -30,7 +30,7 @@ class ClientsGroups extends \yii\db\ActiveRecord
     {
         return [
             [['NAME', 'PERCENT'], 'required'],
-            [['PERCENT'], 'integer'],
+            [['PERCENT', 'LOYALTY_PROGRAM_ID'], 'integer'],
             [['NAME'], 'string', 'max' => 50],
         ];
     }
@@ -42,8 +42,9 @@ class ClientsGroups extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'NAME' => 'Name',
-            'PERCENT' => 'Percent',
+            'NAME' => 'Название',
+            'PERCENT' => 'Процент скидки',
+            'LOYALTY_PROGRAM_ID' => 'Программа лояльности',
         ];
     }
 
@@ -59,5 +60,16 @@ class ClientsGroups extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Clients::className(), ['ID' => 'CLIENT_ID'])
             ->viaTable('clients_clients_groups', ['CLIENTS_GROUPS_ID' => 'ID']);
+    }
+
+
+    /**
+     * Relative with loyalties programs
+     * 
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLoyaltyPrograms()
+    {
+        return $this->hasOne(LoyaltyPrograms::className(), ['ID' => 'LOYALTY_PROGRAM_ID']);
     }
 }

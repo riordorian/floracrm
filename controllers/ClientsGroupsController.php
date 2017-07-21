@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\LoyaltyPrograms;
 use Yii;
 use app\models\ClientsGroups;
 use app\models\ClientsGroupsSearch;
@@ -14,6 +15,32 @@ use yii\filters\VerbFilter;
  */
 class ClientsGroupsController extends Controller
 {
+    /**
+     * Controller layout
+     * @var string
+     */
+    public $layout = 'admin.php';
+
+    /**
+     * Main body class
+     * @var string
+     */
+    public $bodyClass = 'animated_fill-none';
+
+    /**
+     * List items count
+     * @var string
+     */
+    public $listCount = '';
+
+    /**
+     * Boolean param, fix heading on page or not
+     * @var string
+     */
+    public $fixHeading = 'false';
+
+
+
     /**
      * @inheritdoc
      */
@@ -37,6 +64,9 @@ class ClientsGroupsController extends Controller
     {
         $searchModel = new ClientsGroupsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->pagination->pageSize = 15;
+
+        $this->listCount = $dataProvider->getCount();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -64,12 +94,14 @@ class ClientsGroupsController extends Controller
     public function actionCreate()
     {
         $model = new ClientsGroups();
+        $arLoyalties = LoyaltyPrograms::getFilterValues();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->ID]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'arLoyalties' => $arLoyalties
             ]);
         }
     }
@@ -83,12 +115,14 @@ class ClientsGroupsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $arLoyalties = LoyaltyPrograms::getFilterValues();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->ID]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'arLoyalties' => $arLoyalties
             ]);
         }
     }

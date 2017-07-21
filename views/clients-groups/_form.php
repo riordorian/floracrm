@@ -15,9 +15,11 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'NAME')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'PERCENT')->textInput() ?>
+    
+    <?= $form->field($model, 'LOYALTY_PROGRAM_ID')->dropDownList($arLoyalties, ['prompt' => 'Выберите программу лояльности', 'class' => 'js-widget chosen']); ?>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton('<i class="fa fa-check"></i>&nbsp;Сохранить', ['class' => 'btn btn-primary js-btn_cloning']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

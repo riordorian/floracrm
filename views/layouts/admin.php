@@ -21,7 +21,7 @@ AdminAsset::register($this);
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
-<body class="<?=$this->context->bodyClass?>">
+<body class="<?=( !empty($this->context->bodyClass) ) ? $this->context->bodyClass : ''?>">
 <?php $this->beginBody() ?>
 <div id="wrapper">
     <nav class="navbar-default navbar-static-side" role="navigation">
@@ -33,7 +33,7 @@ AdminAsset::register($this);
                             <img alt="image" class="img-circle" src="/assets/admin/img/logo.jpg" />
                         </span>
                         <a data-toggle="dropdown" class="dropdown-toggle" aria-expanded="false" href="#">
-                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Tany Star</strong><b class="caret"></b></span>
+                            <span class="clear"> <span class="block m-t-xs"> <strong class="font-bold">Tani Star</strong><b class="caret"></b></span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a href="profile.html">Profile</a></li>
@@ -52,23 +52,19 @@ AdminAsset::register($this);
                     <a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Маркетинг</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/admin/clients/">Клиенты</a></li>
-                        <li><a href="/admin/clients_groups/">Группы клиентов</a></li>
-                        <li><a href="/admin/loyalty_programs/">Программы лояльности</a></li>
+                        <li><a href="/admin/clients-groups/">Группы клиентов</a></li>
+                        <li><a href="/admin/loyalty-programs/">Программы лояльности</a></li>
                     </ul>
                 </li>
                 <li>
                     <a href="/site/reports/"><i class="fa fa-table"></i> <span class="nav-label">Отчеты</span></a>
                 </li>
                 <li>
-                    <a href="#"><i class="fa fa-files-o"></i> <span class="nav-label">Портал</span><span class="fa arrow"></span></a>
+                    <a href="#"><i class="fa fa-book"></i> <span class="nav-label">Справочники</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level collapse">
-                        <li class=""><a href="/site/portal-settings/">Настройки интеграции с Bitrix24</a></li>
-                        <li><a href="search_results.html">Инструкции</a></li>
-                        <li><a href="login.html">Авторизация</a></li>
-                        <li><a href="forgot_password.html">Забыли пароль</a></li>
-                        <li><a href="register.html">Регистрация</a></li>
-                        <li><a href="404.html">404 Page</a></li>
-                        <li><a href="500.html">500 Page</a></li>
+                        <li class=""><a href="/admin/clients-types/">Типы клиентов</a></li>
+                        <li class=""><a href="/admin/events/">Типы событий</a></li>
+                        <li class=""><a href="/admin/gift-recipients/">Типы получателей</a></li>
                     </ul>
                 </li>
             </ul>
@@ -81,11 +77,6 @@ AdminAsset::register($this);
             <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
-                    <form role="search" class="navbar-form-custom" action="search_results.html">
-                        <div class="form-group">
-                            <input type="text" placeholder="Поиск..." class="form-control" name="top-search" id="top-search">
-                        </div>
-                    </form>
                 </div>
                 <ul class="nav navbar-top-links navbar-right"><?
                     if( Yii::$app->user->isGuest ){
@@ -111,9 +102,10 @@ AdminAsset::register($this);
 
             </nav>
         </div>
-        <div class="row wrapper border-bottom white-bg page-heading">
-            <div class="col-lg-9">
+        <div class="row wrapper border-bottom white-bg page-heading js-page-heading" data-fix-heading="<?=( !empty($this->context->fixHeading) ) ? $this->context->fixHeading : false?>">
+            <div class="col-lg-10">
                 <h1><?=Html::encode($this->title)?> <?=( !empty($this->context->listCount) ) ? '(' . $this->context->listCount . ')' : ''?></h1>
+
                 <?= Breadcrumbs::widget([
                     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
                     'homeLink' => ['label' => 'Главная', 'url' => '/admin/'],
@@ -121,6 +113,7 @@ AdminAsset::register($this);
                     'tag' => 'ol'
                 ]) ?>
             </div>
+            <div class="col-lg-2 js-page-heading__additional"></div>
         </div>
         <div class="wrapper wrapper-content animated fadeInRight">
             <div class="row">

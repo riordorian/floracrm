@@ -1,5 +1,7 @@
 <?php
 
+use app\models\ClientsTypes;
+use app\models\ClientsGroups;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -8,12 +10,12 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="clients-search">
+<div class="clients-search js-reload-elems">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
-    ]); 
+    ]);
     ?>
 
     <div class="row">
@@ -22,26 +24,25 @@ use yii\widgets\ActiveForm;
                     'class' => 'col-md-4'
                 ]
             ]
-        ) ?>
+        )->textInput(['class' => 'form-control js-reload-field']) ?>
 
-        <?= $form->field($model, 'TYPE', [
+        <?= $form->field($model, 'CLIENT_TYPE', [
                 'options' => [
-                    'class' => 'col-md-4'
+                    'class' => 'col-md-3 js-reload-field'
                 ]
             ]
-        ) ?>
+        )->dropDownList(ClientsTypes::getFilterValues(), ['prompt' => 'Любой', 'class' => 'js-widget chosen']) ?>
 
         <?= $form->field($model, 'CLIENT_GROUP', [
                 'options' => [
-                    'class' => 'col-md-4'
+                    'class' => 'col-md-3 js-reload-field'
                 ]
             ]
-        ) ?>
-    </div>
-
-    <div class="form-group">
-        <?= Html::submitButton('Найти', ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Сбросить', ['index'], ['class' => 'btn btn-default']) ?>
+        )->dropDownList(ClientsGroups::getFilterValues(), ['prompt' => 'Любая', 'class' => 'js-widget chosen']) ?>
+        <div class="form-group col-md-2">
+            <label class="control-label">&nbsp;</label><br>
+            <?= Html::a('Сбросить', ['index'], ['class' => 'btn btn-default']) ?>
+        </div>
     </div>
 
     <?php ActiveForm::end(); ?>

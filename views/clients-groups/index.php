@@ -1,4 +1,4 @@
-<?php
+<?
 
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -7,28 +7,40 @@ use yii\widgets\Pjax;
 /* @var $searchModel app\models\ClientsGroupsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Clients Groups';
+$this->title = 'Группы клиентов';
 $this->params['breadcrumbs'][] = $this->title;
-?>
-<div class="clients-groups-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+?><div class="clients-groups-index">
+
+    <?  echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Clients Groups', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('<i class="fa fa-plus"></i>', ['create'], ['class' => 'btn btn-primary btn-lg btn-circle btn-add']) ?>
     </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'ID',
-            'NAME',
-            'PERCENT',
+    <div class="js-replaceable-container"><?
+        Pjax::begin(); ?>    <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'summary' => false,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
-<?php Pjax::end(); ?></div>
+                'NAME',
+                'PERCENT',
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'contentOptions' => ['class' => 'text-right column column_actions']
+                ],
+                [
+                    'attribute' => 'LOYALTY_PROGRAM',
+                    'value' => 'loyaltyPrograms.NAME',
+                ],
+            ],
+            'tableOptions' => [
+                'class' => 'table table-striped'
+            ],
+        ]);
+        Pjax::end();
+    ?></div>
+</div>

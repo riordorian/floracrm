@@ -9,10 +9,10 @@ use Yii;
  *
  * @property integer $ID
  * @property integer $CLIENT_ID
- * @property integer $CLIENTS_GROUPS_ID
+ * @property integer $CLIENT_GROUP_ID
  *
- * @property Clients $cLIENT
- * @property ClientsGroups $cLIENTSGROUPS
+ * @property Clients $CLIENT
+ * @property ClientsGroups $CLIENTSGROUPS
  */
 class ClientsClientsGroups extends \yii\db\ActiveRecord
 {
@@ -30,10 +30,10 @@ class ClientsClientsGroups extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['CLIENT_ID', 'CLIENTS_GROUPS_ID'], 'required'],
-            [['CLIENT_ID', 'CLIENTS_GROUPS_ID'], 'integer'],
+            [['CLIENT_ID', 'CLIENT_GROUP_ID'], 'required'],
+            [['CLIENT_ID', 'CLIENT_GROUP_ID'], 'integer'],
             [['CLIENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => Clients::className(), 'targetAttribute' => ['CLIENT_ID' => 'ID']],
-            [['CLIENTS_GROUPS_ID'], 'exist', 'skipOnError' => true, 'targetClass' => ClientsGroups::className(), 'targetAttribute' => ['CLIENTS_GROUPS_ID' => 'ID']],
+            [['CLIENT_GROUP_ID'], 'exist', 'skipOnError' => true, 'targetClass' => ClientsGroups::className(), 'targetAttribute' => ['CLIENT_GROUP_ID' => 'ID']],
         ];
     }
 
@@ -44,8 +44,8 @@ class ClientsClientsGroups extends \yii\db\ActiveRecord
     {
         return [
             'ID' => 'ID',
-            'CLIENT_ID' => 'Client  ID',
-            'CLIENTS_GROUPS_ID' => 'Clients  Groups  ID',
+            'CLIENT_ID' => 'Клиент',
+            'CLIENT_GROUP_ID' => 'Группа',
         ];
     }
 
@@ -62,7 +62,7 @@ class ClientsClientsGroups extends \yii\db\ActiveRecord
      */
     public function getClientsGroups()
     {
-        return $this->hasOne(ClientsGroups::className(), ['ID' => 'CLIENTS_GROUPS_ID']);
+        return $this->hasOne(ClientsGroups::className(), ['ID' => 'CLIENT_GROUP_ID']);
     }
 
 

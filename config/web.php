@@ -34,7 +34,11 @@ $config = [
             'targets' => [
                 [
                     'class' => 'yii\log\FileTarget',
-                    'levels' => ['error', 'warning'],
+                    'exportInterval' => 1,
+                    'categories' => ['flower'],
+                    'levels' => [],
+                    'logFile' => '@app/log.txt',
+                    'logVars' => []
                 ],
             ],
         ],
@@ -106,8 +110,28 @@ $config = [
 
                 '/admin/' => 'admin/index',
                 '/admin/clients/' => 'clients/index',
-                '/admin/clients/<action:>' => 'clients/<action>'
+                '/admin/clients/<action:>' => 'clients/<action>',
+
+                '/admin/clients-groups/' => 'clients-groups/index/',
+                '/admin/clients-groups/<action:>' => 'clients-groups/<action>',
+                
+                '/admin/clients-types/' => 'clients-types/index/',
+                '/admin/clients-types/<action:>' => 'clients-types/<action>',
+                
+                '/admin/gift-recipients/' => 'gift-recipients/index/',
+                '/admin/gift-recipients/<action:>' => 'gift-recipients/<action>',
+
+                '/admin/events/' => 'events/index/',
+                '/admin/events/<action:>' => 'events/<action>',
+
+                '/admin/loyalty-programs/' => 'loyalty-programs/create/',
+                '/admin/loyalty-programs/<action:>' => 'loyalty-programs/<action>',
+
+                #VIRTUAL SECTIONS#
+                '/admin/clients-events/<action:>' => 'clients-events/<action>',
+                '/admin/loyalty-programs-steps/<action:>' => 'loyalty-programs-steps/<action>',
             ],
+            'suffix' => '/',
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',

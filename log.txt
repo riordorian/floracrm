@@ -1,0 +1,68 @@
+2017-07-20 21:25:07 [127.0.0.1][1][29f3ca70087782c9df767a9c5bd4f97e][info][flower] yii\base\UnknownPropertyException: Setting unknown property: app\models\LoyaltyProgramsSteps:: in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Component.php:201
+Stack trace:
+#0 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(306): yii\base\Component->__set('', '2017-07-20')
+#1 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/Prototype.php(126): yii\db\BaseActiveRecord->__set('', '2017-07-20')
+#2 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Model.php(343): app\models\Prototype->beforeValidate()
+#3 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/ActiveRecord.php(564): yii\base\Model->validate(NULL)
+#4 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(637): yii\db\ActiveRecord->update(true, NULL)
+#5 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php(145): yii\db\BaseActiveRecord->save(true)
+#6 [internal function]: app\controllers\LoyaltyProgramsController->actionCreate()
+#7 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('create', Array)
+#10 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('loyalty-program...', Array)
+#11 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/index.php(12): yii\base\Application->run()
+#13 {main}
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php:148
+2017-07-20 21:25:07 [127.0.0.1][1][29f3ca70087782c9df767a9c5bd4f97e][info][flower] yii\base\UnknownPropertyException: Setting unknown property: app\models\LoyaltyProgramsSteps:: in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Component.php:201
+Stack trace:
+#0 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(306): yii\base\Component->__set('', '2017-07-20')
+#1 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/Prototype.php(126): yii\db\BaseActiveRecord->__set('', '2017-07-20')
+#2 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Model.php(343): app\models\Prototype->beforeValidate()
+#3 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/ActiveRecord.php(564): yii\base\Model->validate(NULL)
+#4 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(637): yii\db\ActiveRecord->update(true, NULL)
+#5 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php(145): yii\db\BaseActiveRecord->save(true)
+#6 [internal function]: app\controllers\LoyaltyProgramsController->actionCreate()
+#7 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('create', Array)
+#10 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('loyalty-program...', Array)
+#11 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/index.php(12): yii\base\Application->run()
+#13 {main}
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php:148
+2017-07-20 21:25:48 [127.0.0.1][1][29f3ca70087782c9df767a9c5bd4f97e][info][flower] yii\base\UnknownPropertyException: Setting unknown property: app\models\LoyaltyProgramsSteps:: in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Component.php:201
+Stack trace:
+#0 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(306): yii\base\Component->__set('', '2017-07-20')
+#1 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/Prototype.php(127): yii\db\BaseActiveRecord->__set('', '2017-07-20')
+#2 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Model.php(343): app\models\Prototype->beforeValidate()
+#3 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/ActiveRecord.php(564): yii\base\Model->validate(NULL)
+#4 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(637): yii\db\ActiveRecord->update(true, NULL)
+#5 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php(145): yii\db\BaseActiveRecord->save(true)
+#6 [internal function]: app\controllers\LoyaltyProgramsController->actionCreate()
+#7 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('create', Array)
+#10 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('loyalty-program...', Array)
+#11 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/index.php(12): yii\base\Application->run()
+#13 {main}
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php:148
+2017-07-20 21:25:48 [127.0.0.1][1][29f3ca70087782c9df767a9c5bd4f97e][info][flower] yii\base\UnknownPropertyException: Setting unknown property: app\models\LoyaltyProgramsSteps:: in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Component.php:201
+Stack trace:
+#0 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(306): yii\base\Component->__set('', '2017-07-20')
+#1 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/Prototype.php(127): yii\db\BaseActiveRecord->__set('', '2017-07-20')
+#2 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Model.php(343): app\models\Prototype->beforeValidate()
+#3 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/ActiveRecord.php(564): yii\base\Model->validate(NULL)
+#4 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/db/BaseActiveRecord.php(637): yii\db\ActiveRecord->update(true, NULL)
+#5 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php(145): yii\db\BaseActiveRecord->save(true)
+#6 [internal function]: app\controllers\LoyaltyProgramsController->actionCreate()
+#7 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/InlineAction.php(57): call_user_func_array(Array, Array)
+#8 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Controller.php(156): yii\base\InlineAction->runWithParams(Array)
+#9 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Module.php(523): yii\base\Controller->runAction('create', Array)
+#10 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/web/Application.php(102): yii\base\Module->runAction('loyalty-program...', Array)
+#11 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/vendor/yiisoft/yii2/base/Application.php(380): yii\web\Application->handleRequest(Object(yii\web\Request))
+#12 /Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/index.php(12): yii\base\Application->run()
+#13 {main}
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/LoyaltyProgramsController.php:148

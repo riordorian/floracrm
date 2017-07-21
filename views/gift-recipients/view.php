@@ -4,19 +4,20 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Clients */
+/* @var $model app\models\EventsTypes */
 
 $this->title = $model->NAME;
-$this->params['breadcrumbs'][] = ['label' => 'Клиенты', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Типы получателей', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="clients-view">
+<div class="events-types-view">
+
     <p>
         <?= Html::a('Обновить', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->ID], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Вы уверены, что хотите удалить клиента?',
+                'confirm' => 'Вы уверены, что хотите удалить тип получателей?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -27,12 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'ID',
             'NAME',
-//            'TYPE',
-            'GENDER',
-            'BIRTHDAY',
-            'PHONE',
-            'EMAIL:email',
-            'DESCRIPTION:ntext',
         ],
     ]) ?>
 

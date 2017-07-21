@@ -13,6 +13,7 @@ use app\models\Clients;
 class ClientsSearch extends Clients
 {
     public $CLIENT_GROUP;
+    public $CLIENT_TYPE;
     /**
      * @inheritdoc
      */
@@ -20,7 +21,7 @@ class ClientsSearch extends Clients
     {
         return [
             [['ID'], 'integer'],
-            [['NAME', 'TYPE', 'GENDER', 'BIRTHDAY', 'PHONE', 'EMAIL', 'DESCRIPTION', 'CLIENT_GROUP'], 'safe'],
+            [['NAME', 'GENDER', 'BIRTHDAY', 'PHONE', 'EMAIL', 'DESCRIPTION', 'CLIENT_GROUP', 'CLIENT_TYPE'], 'safe'],
             [['GROUP'], 'safe'],
         ];
     }
@@ -52,10 +53,19 @@ class ClientsSearch extends Clients
         ]);
 
         // Add sorting by user group
-        $query->joinWith('clientsClientsGroups')->joinWith('clientsClientsGroups.clientsGroups');
+        $query
+            ->joinWith('clientsClientsGroups')
+            ->joinWith('clientsClientsGroups.clientsGroups')
+            ->joinWith('clientsClientsTypes')
+            ->joinWith('clientsClientsTypes.clientType');
+
         $dataProvider->sort->attributes['CLIENT_GROUP'] = [
             'asc' => ['clients_groups.NAME' => SORT_ASC],
             'desc' => ['clients_groups.NAME' => SORT_DESC],
+        ];
+        $dataProvider->sort->attributes['CLIENT_TYPE'] = [
+            'asc' => ['clients_types.NAME' => SORT_ASC],
+            'desc' => ['clients_types.NAME' => SORT_DESC],
         ];
 
         $this->load($params);
@@ -71,10 +81,9 @@ class ClientsSearch extends Clients
             'ID' => $this->ID,
             'BIRTHDAY' => $this->BIRTHDAY,
         ]);
-        
         $query->andFilterWhere(['like', 'clients.NAME', $this->NAME])
-            ->andFilterWhere(['like', 'clients.TYPE', $this->TYPE])
-            ->andFilterWhere(['like', 'clients_groups.NAME', $this->CLIENT_GROUP]);
+            ->andFilterWhere(['like', 'clients_types.ID', $this->CLIENT_TYPE])
+            ->andFilterWhere(['like', 'clients_groups.ID', $this->CLIENT_GROUP]);
             /*->andFilterWhere(['like', 'GENDER', $this->GENDER])
             ->andFilterWhere(['like', 'PHONE', $this->PHONE])
             ->andFilterWhere(['like', 'EMAIL', $this->EMAIL])

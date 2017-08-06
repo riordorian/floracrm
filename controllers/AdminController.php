@@ -2,46 +2,44 @@
 
 namespace app\controllers;
 
-use app\models\Clients;
 use Yii;
-use yii\data\ActiveDataProvider;
-use yii\filters\AccessControl;
+use yii\imagine\Image;
 use yii\web\Controller;
-use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use yii\web\UploadedFile;
+
 
 class AdminController extends Controller
 {
+    /**
+     * Controller layout
+     * @var string
+     */
     public $layout = 'admin.php';
+
+    /**
+     * Main body class
+     * @var string
+     */
+    public $bodyClass = 'animated_fill-none';
+
+    /**
+     * List items count
+     * @var string
+     */
+    public $listCount = '';
+
+    /**
+     * Boolean param, fix heading on page or not
+     * @var string
+     */
+    public $fixHeading = 'false';
 
     /**
      * Displays clients list.
      *
      * @return string
      */
-   /* public function actionClients()
-    {
-        $model = new Clients();
-        $dataProvider = new ActiveDataProvider([
-            'query' => $model
-                ->find()
-                ->select([
-                    $model->tableAlias() . '.ID',
-                    $model->tableAlias() . '.NAME',
-                    $model->tableAlias() . '.PHONE',
-                    'GROUP_NAME' => 'cg.NAME'
-                ])
-                ->from($model->tableName() . ' ' . $model->tableAlias())
-                ->join('LEFT JOIN', ['clients_clients_groups ccg'], 'ccg.CLIENT_ID = ' . $model->tableAlias() . '.ID' )
-                ->join('LEFT JOIN', ['clients_groups cg'], 'ccg.CLIENTS_GROUPS_ID = ' . 'cg.ID' ),
-            'pagination' => [
-                'pageSize' => 20,
-            ]
-        ]);
-
-        return $this->render('clients/clients', ['dataProvider' => $dataProvider]);
-    }*/
+   
 
     /**
      * Display admin homepage.
@@ -51,5 +49,42 @@ class AdminController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    /**
+     * Save model
+     *
+     * @param $model
+     *
+     * @throws \Exception
+     */
+    public function saveModel($model)
+    {
+        if( empty($model) ){
+            throw new \Exception('Empty model');
+        }
+
+        $model->UPLOAD = UploadedFile::getInstance($model, 'UPLOAD');
+        if( $model->UPLOAD ){
+            $fileName = $model->UPLOAD->baseName . '.' . $model->UPLOAD->extension;
+
+            $newImgDir = Yii::$app->params['filesUploadUrl'] . $model::tableName() . '/' . substr(md5($fileName), 0, 5) . '/';
+            $newFileDir = Yii::getAlias('@webroot') . $newImgDir;
+            $newFilePath = $newFileDir . $fileName;
+
+            if( !is_dir($newFileDir) ){
+                mkdir($newFileDir, 0777, true);
+            }
+
+            if( $model->UPLOAD->saveAs($newFilePath)
+                &&  Image::thumbnail($newFilePath, 500, 500)->save($newFilePath) ) {
+                $model->IMAGE = $newImgDir . $fileName;
+            }
+            $model->UPLOAD = null;
+        }
+
+        if( $model->validate() ){
+            $model->save();
+        }
     }
 }

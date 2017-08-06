@@ -6,41 +6,14 @@ use app\models\LoyaltyPrograms;
 use Yii;
 use app\models\ClientsGroups;
 use app\models\ClientsGroupsSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * ClientsGroupsController implements the CRUD actions for ClientsGroups model.
  */
-class ClientsGroupsController extends Controller
+class ClientsGroupsController extends AdminController
 {
-    /**
-     * Controller layout
-     * @var string
-     */
-    public $layout = 'admin.php';
-
-    /**
-     * Main body class
-     * @var string
-     */
-    public $bodyClass = 'animated_fill-none';
-
-    /**
-     * List items count
-     * @var string
-     */
-    public $listCount = '';
-
-    /**
-     * Boolean param, fix heading on page or not
-     * @var string
-     */
-    public $fixHeading = 'false';
-
-
-
     /**
      * @inheritdoc
      */

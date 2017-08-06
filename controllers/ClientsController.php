@@ -13,40 +13,14 @@ use Yii;
 use app\models\Clients;
 use app\models\ClientsTypes;
 use app\models\ClientsSearch;
-use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
  * ClientsController implements the CRUD actions for Clients model.
  */
-class ClientsController extends Controller
+class ClientsController extends AdminController
 {
-    /**
-     * Controller layout
-     * @var string
-     */
-    public $layout = 'admin.php';
-
-    /**
-     * Main body class
-     * @var string
-     */
-    public $bodyClass = 'animated_fill-none';
-
-    /**
-     * List items count
-     * @var string
-     */
-    public $listCount = '';
-
-    /**
-     * Boolean param, fix heading on page or not
-     * @var string
-     */
-    public $fixHeading = 'false';
-
-
     /**
      * @inheritdoc
      */
@@ -71,7 +45,6 @@ class ClientsController extends Controller
         $searchModel = new ClientsSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->pagination->pageSize = 15;
-
         $this->listCount = $dataProvider->getCount();
         
         return $this->render('index', [

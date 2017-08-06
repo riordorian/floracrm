@@ -127,6 +127,15 @@ $config = [
                 '/admin/loyalty-programs/' => 'loyalty-programs/create/',
                 '/admin/loyalty-programs/<action:>' => 'loyalty-programs/<action>',
 
+                '/admin/catalog-sections/' => 'catalog-sections/index',
+                '/admin/catalog-sections/<action:>' => 'catalog-sections/<action>',
+
+                '/admin/catalog-products/' => 'catalog-products/index/',
+                '/admin/catalog-products/<action:>' => 'catalog-products/<action>',
+
+                '/admin/money-accounts/' => 'money-accounts/index/',
+                '/admin/money-accounts/<action:>' => 'money-accounts/<action>',
+
                 #VIRTUAL SECTIONS#
                 '/admin/clients-events/<action:>' => 'clients-events/<action>',
                 '/admin/loyalty-programs-steps/<action:>' => 'loyalty-programs-steps/<action>',
@@ -166,3 +175,5 @@ if (YII_ENV_DEV) {
 }
 
 return $config;
+
+\Site\Main\Util::debug();

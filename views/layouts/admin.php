@@ -57,6 +57,19 @@ AdminAsset::register($this);
                     </ul>
                 </li>
                 <li>
+                    <a href="#"><i class="fa fa-euro"></i> <span class="nav-label">Финансы</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="/admin/money-accounts/">Счета</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#"><i class="fa fa-shopping-cart"></i> <span class="nav-label">Каталог</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li><a href="/admin/catalog-sections/">Категории товаров</a></li>
+                        <li><a href="/admin/catalog-products/">Товары</a></li>
+                    </ul>
+                </li>
+                <li>
                     <a href="/site/reports/"><i class="fa fa-table"></i> <span class="nav-label">Отчеты</span></a>
                 </li>
                 <li>

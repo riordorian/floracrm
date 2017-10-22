@@ -101,20 +101,20 @@ class Clients extends Prototype
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
-            $obCCTypes = new ClientsClientsTypes();
-            $obCCTypes->load(Yii::$app->request->post());
+        $obCCTypes = new ClientsClientsTypes();
+        $obCCTypes->load(Yii::$app->request->post());
 
-            $obCCGroups = new ClientsClientsGroups();
-            $obCCGroups->load(Yii::$app->request->post());
+        $obCCGroups = new ClientsClientsGroups();
+        $obCCGroups->load(Yii::$app->request->post());
 
-            $obCCGroups->CLIENT_ID = $obCCTypes->CLIENT_ID = $this->ID;
+        $obCCGroups->CLIENT_ID = $obCCTypes->CLIENT_ID = $this->ID;
 
-            try{
-                $obCCTypes->save(false);
-                $obCCGroups->save(false);
-            }
-            catch(\Exception $e){
-                ?><pre><?print_r($e)?></pre><?
-            }
+        try{
+            $obCCTypes->save(false);
+            $obCCGroups->save(false);
+        }
+        catch(\Exception $e){
+            ?><pre><?print_r($e)?></pre><?
+        }
     }
 }

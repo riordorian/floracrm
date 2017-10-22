@@ -21,7 +21,10 @@ $this->context->fixHeading = 'true';
             <div id="tab-1" class="tab-pane active">
                 <div class="panel-body"><?
                     $form = ActiveForm::begin([
-                        'method' => 'post'
+                        'method' => 'post',
+                        'options' => [
+                            'class' => 'js-ajax-replaceable'
+                        ]
                     ]);
 
                     ?><div class="btn-group m-b-md" data-toggle="buttons"><?

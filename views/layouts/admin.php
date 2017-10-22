@@ -60,6 +60,9 @@ AdminAsset::register($this);
                     <a href="#"><i class="fa fa-euro"></i> <span class="nav-label">Финансы</span><span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li><a href="/admin/money-accounts/">Счета</a></li>
+                        <li><a href="/admin/money-movements/">Операции</a></li>
+                        <li><a href="/admin/cashboxes/">Кассы</a></li>
+                        <li><a href="/admin/cash-periods/">Кассовые смены</a></li>
                     </ul>
                 </li>
                 <li>

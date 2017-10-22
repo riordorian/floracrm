@@ -1,12 +1,26 @@
 <?php
 
 $params = require(__DIR__ . '/params.php');
-
 $config = [
+    'language' => 'ru',
     'id' => 'basic',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'components' => [
+        'i18n' => [
+            'translations' => [
+                'users' => [
+                    'sourceLanguage' => 'ru',
+                    'class' => yii\i18n\PhpMessageSource::className(),
+                    'basePath' => '@app/vendor/budyaga/yii2-users/messages',
+                    'fileMap' => [
+                        '/models/user' => 'users.php',
+                        'module' => 'users.php',
+                    ],
+                    'forceTranslation' => true
+                ],
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'vtnfybtrjgmz',
@@ -136,6 +150,15 @@ $config = [
                 '/admin/money-accounts/' => 'money-accounts/index/',
                 '/admin/money-accounts/<action:>' => 'money-accounts/<action>',
 
+                '/admin/money-movements/' => 'money-movements/index/',
+                '/admin/money-movements/<action:>' => 'money-movements/<action>',
+
+                '/admin/cashboxes/' => 'cashboxes/index/',
+                '/admin/cashboxes/<action:>' => 'cashboxes/<action>',
+
+                '/admin/cash-periods/' => 'cash-periods/index/',
+                '/admin/cash-periods/<action:>' => 'cash-periods/<action>',
+
                 #VIRTUAL SECTIONS#
                 '/admin/clients-events/<action:>' => 'clients-events/<action>',
                 '/admin/loyalty-programs-steps/<action:>' => 'loyalty-programs-steps/<action>',
@@ -175,5 +198,3 @@ if (YII_ENV_DEV) {
 }
 
 return $config;
-
-\Site\Main\Util::debug();

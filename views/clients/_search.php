@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'CLIENT_GROUP', [
                 'options' => [
-                    'class' => 'col-md-3 js-reload-field'
+                    'class' => 'col-md-3 '
                 ]
             ]
         )->dropDownList(ClientsGroups::getFilterValues(), ['prompt' => 'Любая', 'class' => 'js-widget chosen']) ?>

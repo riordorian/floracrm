@@ -27,10 +27,17 @@ class AdminAsset extends AssetBundle
         '/assets/admin/css/plugins/chosen/bootstrap-chosen.css',
 
         /*DATAPICKER*/
-        '/assets/admin/css/plugins/datapicker/datepicker3.css',
+        '/assets/admin/css/plugins/datepicker/datepicker3.css',
+        '/assets/admin/css/plugins/datepicker/datetimepicker.css',
 
         /*ICHEK*/
         '/assets/admin/css/plugins/iCheck/custom.css',
+
+        /*SWITCHER*/
+        '/assets/admin/css/plugins/switchery/switchery.css',
+
+        /*MAGNIFIC-POPUP*/
+        '/assets/admin/css/plugins/mgnfc-popup/magnific-popup.css',
 
         '/assets/admin/font-awesome/css/font-awesome.css',
         '/assets/admin/css/style.css',
@@ -50,11 +57,21 @@ class AdminAsset extends AssetBundle
         'assets/admin/js/plugins/slimscroll/jquery.slimscroll.min.js',
 //        'assets/admin/js/plugins/pace/pace.min.js',
 
-        /*DATAPICKER*/
-        'assets/admin/js/plugins/datapicker/bootstrap-datepicker.js',
+        /*DATEPICKER*/
+        'assets/admin/js/plugins/datepicker/bootstrap-datepicker.js',
+
+        /*DATETIMEPICKER*/
+        'assets/admin/js/moment.js',
+        'assets/admin/js/plugins/datepicker/datetimepicker.js',
 
         /*MASKED INPUT*/
         'assets/admin/js/plugins/jasny/jasny-bootstrap.min.js',
+
+        /*SWITCHER*/
+        'assets/admin/js/plugins/switchery/switchery.js',
+
+        /*MAGNIFIC-POPUP*/
+        'assets/admin/js/plugins/mgnfc-popup/jquery.magnific-popup.js',
 
         'assets/admin/js/inspinia.js',
         'assets/admin/js/crm.js',

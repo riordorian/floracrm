@@ -83,6 +83,12 @@ AdminAsset::register($this);
                         <li class=""><a href="/admin/gift-recipients/">Типы получателей</a></li>
                     </ul>
                 </li>
+                <li>
+                    <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Пользователи</span><span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level collapse">
+                        <li class=""><a href="/admin/operators/">Флористы</a></li>
+                    </ul>
+                </li>
             </ul>
 
         </div>

@@ -1,6 +1,6 @@
 <? $intClosingTime = strtotime($model->CLOSING_TIME);
 
-?><div class="white-bg p-m col-md-8 col-md-offset-2 js-ajax-loaded js-replaceable-container">
+?><div class="white-bg p-m col-md-8 col-md-offset-2 js-ajax-loaded js-replaceable-container cash-period" data-cashbox-id="<?=$model->ID?>">
 	<div class="tabs-container">
 		<ul class="nav nav-tabs">
 			<li class="active"><a data-toggle="tab" href="#tab-1">Основное</a></li><?
@@ -30,7 +30,7 @@
 								&& $intClosingTime < 0 ) ? $model->OPENING_CASH : $model->CURRENT_CASH?>  <i class="fa fa-rub"></i>
 						</p>
 						<p class="field field_opening-cash">
-							<b><?=$model->getAttributeLabel('PROFIT')?>: </b> <?=$model->CURRENT_CASH - $model->OPENING_CASH ?>  <i class="fa fa-rub"></i>
+							<b><?=$model->getAttributeLabel('PROFIT')?>: </b> <?=$model->CASH_INCOMES + $model->CARDS_INCOMES ?>  <i class="fa fa-rub"></i>
 						</p>
 						<p class="field field_opening-cash">
 							<b><?=$model->getAttributeLabel('CASH_PROFIT')?>: </b> <?=$model->CASH_INCOMES?>  <i class="fa fa-rub"></i>
@@ -52,7 +52,7 @@
 						}
 						elseif( $intClosingTime < 0 ){
 							?><div class="cash-period__buttons">
-							<a href="/admin/cash-periods/close/?id=<?=$model->ID?>" class="btn btn-primary js-ajax-link">Закрыть смену</a>
+								<a href="/admin/cash-periods/close/?id=<?=$model->ID?>" class="btn btn-primary js-ajax-link">Закрыть смену</a>
 							</div><?
 						}
 						?>

@@ -1,0 +1,10 @@
+2017-10-29 10:50:49 [127.0.0.1][-][-][trace][flower] Closing cash period error
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/CashPeriodsController.php:148
+2017-10-29 10:51:49 [127.0.0.1][-][-][trace][flower] Closing cash period error
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/CashPeriodsController.php:148
+2017-10-29 10:52:07 [127.0.0.1][-][-][trace][flower] Closing cash period error
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/CashPeriodsController.php:148
+2017-10-29 10:52:49 [127.0.0.1][-][-][trace][flower] Closing cash period error
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/CashPeriodsController.php:148
+2017-10-29 10:53:20 [127.0.0.1][-][-][trace][flower] Closing cash period error
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/CashPeriodsController.php:148

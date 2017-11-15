@@ -122,7 +122,7 @@ $config = [
                 '/oauth/<authclient:[\w\-]+>' => '/user/auth/index',
                 '<action:>' => 'site/<action>',
 
-                '/admin/' => 'admin/index',
+                '/admin/' => 'user/user/login',
                 '/admin/clients/' => 'clients/index',
                 '/admin/clients/<action:>' => 'clients/<action>',
 
@@ -159,9 +159,18 @@ $config = [
                 '/admin/cash-periods/' => 'cash-periods/index/',
                 '/admin/cash-periods/<action:>' => 'cash-periods/<action>',
 
+                '/admin/operators/' => 'operators/index/',
+                '/admin/operators/<action:>' => 'operators/<action>',
+
                 #VIRTUAL SECTIONS#
                 '/admin/clients-events/<action:>' => 'clients-events/<action>',
                 '/admin/loyalty-programs-steps/<action:>' => 'loyalty-programs-steps/<action>',
+
+
+
+                # TERMINAL
+                '/terminal/' => 'terminal/index/',
+                '/terminal/<action:>' => 'terminal/<action>',
             ],
             'suffix' => '/',
         ],
@@ -174,7 +183,7 @@ $config = [
         'user' => [
             'class' => 'budyaga\users\Module',
             'userPhotoUrl' => 'http://example.com/uploads/user/photo',
-            'userPhotoPath' => '@frontend/web/uploads/user/photo'
+            'userPhotoPath' => '@frontend/web/uploads/user/photo',
         ],
     ],
     'params' => $params,

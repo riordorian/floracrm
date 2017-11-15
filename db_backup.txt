@@ -1,0 +1,915 @@
+-- phpMyAdmin SQL Dump
+-- version 4.6.5.2
+-- https://www.phpmyadmin.net/
+--
+-- Хост: localhost:8889
+-- Время создания: Сен 07 2017 г., 09:52
+-- Версия сервера: 5.6.35
+-- Версия PHP: 7.0.15
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+--
+-- База данных: `db_flower`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `auth_assignment`
+--
+
+CREATE TABLE `auth_assignment` (
+  `item_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `auth_assignment`
+--
+
+INSERT INTO `auth_assignment` (`item_name`, `user_id`, `created_at`, `updated_at`) VALUES
+('administrator', 1, 1493648308, 1493648308),
+('moderator', 2, 1493648308, 1493648308);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `auth_item`
+--
+
+CREATE TABLE `auth_item` (
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `type` int(11) NOT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `rule_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `data` text COLLATE utf8_unicode_ci,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `auth_item`
+--
+
+INSERT INTO `auth_item` (`name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) VALUES
+('administrator', 1, 'Administrator', NULL, NULL, 1493648308, 1493648308),
+('moderator', 1, 'Moderator', NULL, NULL, 1493648308, 1493648308),
+('rbacManage', 2, 'Management RBAC structure', NULL, NULL, 1493648308, 1493648308),
+('userCreate', 2, 'Creating users', NULL, NULL, 1493648308, 1493648308),
+('userDelete', 2, 'Deleting users', NULL, NULL, 1493648308, 1493648308),
+('userManage', 2, 'Browse list of users', NULL, NULL, 1493648308, 1493648308),
+('userPermissions', 2, 'User rights management', NULL, NULL, 1493648308, 1493648308),
+('userUpdate', 2, 'Editing users', NULL, NULL, 1493648308, 1493648308),
+('userUpdateNoElderRank', 2, 'Editing users with equal or lower rank', NULL, NULL, 1493648308, 1493648308),
+('userView', 2, 'Viewing user information', NULL, NULL, 1493648308, 1493648308);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `auth_item_child`
+--
+
+CREATE TABLE `auth_item_child` (
+  `parent` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `child` varchar(64) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `auth_item_child`
+--
+
+INSERT INTO `auth_item_child` (`parent`, `child`) VALUES
+('administrator', 'moderator'),
+('administrator', 'rbacManage'),
+('administrator', 'userCreate'),
+('administrator', 'userDelete'),
+('moderator', 'userManage'),
+('administrator', 'userPermissions'),
+('administrator', 'userUpdate'),
+('userUpdateNoElderRank', 'userUpdate'),
+('moderator', 'userUpdateNoElderRank'),
+('moderator', 'userView');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `auth_rule`
+--
+
+CREATE TABLE `auth_rule` (
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `data` text COLLATE utf8_unicode_ci,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `CATALOG_PRODUCTS`
+--
+
+CREATE TABLE `CATALOG_PRODUCTS` (
+  `ID` int(11) NOT NULL COMMENT 'ID',
+  `NAME` varchar(70) NOT NULL COMMENT 'Название',
+  `CODE` varchar(70) DEFAULT NULL COMMENT 'Символьный код',
+  `CATALOG_SECTION_ID` int(11) NOT NULL COMMENT 'Тип товара',
+  `IMAGE` varchar(150) DEFAULT NULL COMMENT 'Изображение',
+  `BASE_PRICE` float NOT NULL COMMENT 'Закупочная цена',
+  `RETAIL_PRICE` float NOT NULL COMMENT 'Розничная цена',
+  `EXPIRATION_TIME` int(11) DEFAULT NULL COMMENT 'Срок годности',
+  `MIN_COUNT` int(11) DEFAULT NULL COMMENT 'Минимальный остаток'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `CATALOG_PRODUCTS`
+--
+
+INSERT INTO `CATALOG_PRODUCTS` (`ID`, `NAME`, `CODE`, `CATALOG_SECTION_ID`, `IMAGE`, `BASE_PRICE`, `RETAIL_PRICE`, `EXPIRATION_TIME`, `MIN_COUNT`) VALUES
+(1, 'Роза красная', 'SDJ123KD', 10, '/uploads/CATALOG_PRODUCTS/51275/Иона Валаамский.jpg', 1300, 1200, 5, 5),
+(2, 'Роза желтая', '45MG283KQ', 11, '/uploads/CATALOG_PRODUCTS/2b312/Валаамские_старцы._Иеросхимонах_Иоанн,_иеросхимонах_Михаил_(Питкевич),_схимонах_Николай_(Монахов)._1960_год.png', 30, 150, 5, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `catalog_sections`
+--
+
+CREATE TABLE `catalog_sections` (
+  `ID` int(11) NOT NULL COMMENT 'ID',
+  `NAME` varchar(50) NOT NULL COMMENT 'Название',
+  `IMAGE` varchar(150) DEFAULT NULL COMMENT 'Изображение'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `catalog_sections`
+--
+
+INSERT INTO `catalog_sections` (`ID`, `NAME`, `IMAGE`) VALUES
+(3, 'Розы', '/uploads/1.jpg'),
+(4, 'Розы', '/uploads/1.jpg'),
+(5, 'Роза 5', NULL),
+(10, 'Роза красная', '/uploads/catalog_sections/75617/Адриан Ондрусовский.jpg'),
+(11, 'Роза желтая', '/uploads/catalog_sections/ba038/сщмч. Вениамин Петрогр. митр..jpg');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `clients`
+--
+
+CREATE TABLE `clients` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(100) NOT NULL COMMENT 'ФИО',
+  `GENDER` varchar(1) NOT NULL DEFAULT 'M',
+  `BIRTHDAY` date DEFAULT NULL,
+  `PHONE` varchar(20) NOT NULL,
+  `EMAIL` varchar(40) DEFAULT NULL,
+  `DESCRIPTION` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `clients`
+--
+
+INSERT INTO `clients` (`ID`, `NAME`, `GENDER`, `BIRTHDAY`, `PHONE`, `EMAIL`, `DESCRIPTION`) VALUES
+(72, 'Юра тест телефона 5', '', '2017-07-19', '+7 (910) 665-31- 17', 'riordorian@mail.ru', 'фыв'),
+(73, 'Юра тест телефона', 'M', '2027-09-20', '+7 (910) 665-31- 18', 'riordorian@mail.ru', ''),
+(74, 'Юрий', 'М', '2025-09-20', '+7 (123) 123-18- 78', 'riordorian@mail.ru', ''),
+(78, 'Юрий2', 'М', '2025-09-20', '+7 (123) 123-18- 80', 'riordorian2@mail.ru', ''),
+(79, 'Юра3', 'М', '2019-09-20', '+7 (123) 123-12-31', 'riordori3an@mail.ru', ''),
+(84, 'Тест кампании', 'M', '2031-10-20', '+7 (123) 444-44-44', 'rior2dorian@mail.ru', ''),
+(85, 'ООО ООО', 'M', '2017-04-02', '+7 (123) 123-12-34', 'ksdj@ksdfj.ri', ''),
+(86, 'Смирнов Юрий Игоревич', 'М', '2016-01-02', '+7 (910) 665-31-17', 'riordorian@gmail.com', ''),
+(87, 'Компания', 'M', '2017-07-20', '+7 (991) 991-29-39', 'kjskldj@aksjdk.ru', '');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `clients_clients_groups`
+--
+
+CREATE TABLE `clients_clients_groups` (
+  `ID` int(11) NOT NULL,
+  `CLIENT_ID` int(11) NOT NULL,
+  `CLIENT_GROUP_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `clients_clients_groups`
+--
+
+INSERT INTO `clients_clients_groups` (`ID`, `CLIENT_ID`, `CLIENT_GROUP_ID`) VALUES
+(4, 72, 1),
+(5, 73, 1),
+(6, 74, 2),
+(8, 78, 2),
+(9, 79, 1),
+(12, 84, 2),
+(13, 85, 2),
+(14, 72, 1),
+(15, 86, 1),
+(16, 87, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `clients_clients_types`
+--
+
+CREATE TABLE `clients_clients_types` (
+  `ID` int(11) NOT NULL,
+  `CLIENT_ID` int(11) NOT NULL,
+  `CLIENT_TYPE_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `clients_clients_types`
+--
+
+INSERT INTO `clients_clients_types` (`ID`, `CLIENT_ID`, `CLIENT_TYPE_ID`) VALUES
+(11, 72, 1),
+(49, 72, 2),
+(12, 73, 1),
+(13, 74, 1),
+(15, 78, 1),
+(16, 79, 1),
+(28, 84, 2),
+(48, 85, 2),
+(50, 86, 1),
+(52, 87, 2);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `clients_events`
+--
+
+CREATE TABLE `clients_events` (
+  `ID` int(11) NOT NULL,
+  `CLIENT_ID` int(11) NOT NULL,
+  `EVENT_ID` int(11) NOT NULL,
+  `GIFT_RECIPIENT_ID` int(11) NOT NULL,
+  `EVENT_DATE` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `clients_events`
+--
+
+INSERT INTO `clients_events` (`ID`, `CLIENT_ID`, `EVENT_ID`, `GIFT_RECIPIENT_ID`, `EVENT_DATE`) VALUES
+(61, 72, 2, 1, '2017-01-05'),
+(62, 72, 2, 3, '2017-08-06');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `clients_gift_recipients`
+--
+
+CREATE TABLE `clients_gift_recipients` (
+  `ID` int(11) NOT NULL,
+  `CLIENT_ID` int(11) NOT NULL,
+  `GIFT_RECIPIENT_ID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `clients_groups`
+--
+
+CREATE TABLE `clients_groups` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(50) NOT NULL,
+  `PERCENT` int(11) NOT NULL,
+  `LOYALTY_PROGRAM_ID` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `clients_groups`
+--
+
+INSERT INTO `clients_groups` (`ID`, `NAME`, `PERCENT`, `LOYALTY_PROGRAM_ID`) VALUES
+(1, 'Постоянные покупатели', 20, 13),
+(2, 'Золотые клиенты', 33, 12),
+(3, 'Бронзовые покупатели', 7, 12);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `clients_types`
+--
+
+CREATE TABLE `clients_types` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `clients_types`
+--
+
+INSERT INTO `clients_types` (`ID`, `NAME`) VALUES
+(1, 'Физлицо'),
+(2, 'Юрлицо');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `events`
+--
+
+CREATE TABLE `events` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+--
+-- Дамп данных таблицы `events`
+--
+
+INSERT INTO `events` (`ID`, `NAME`) VALUES
+(2, 'День рождения');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `gift_recipients`
+--
+
+CREATE TABLE `gift_recipients` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `gift_recipients`
+--
+
+INSERT INTO `gift_recipients` (`ID`, `NAME`) VALUES
+(1, 'Муж'),
+(2, 'Жена'),
+(3, 'Брат'),
+(4, 'Сестра'),
+(5, 'Тетя');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `loyalty_programs`
+--
+
+CREATE TABLE `loyalty_programs` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(50) NOT NULL,
+  `MAX_PERCENT` int(11) NOT NULL,
+  `WELCOME_BONUS` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `loyalty_programs`
+--
+
+INSERT INTO `loyalty_programs` (`ID`, `NAME`, `MAX_PERCENT`, `WELCOME_BONUS`) VALUES
+(12, 'Бонусная система', 35, 33),
+(13, 'Скидочная система', 11, 33);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `loyalty_programs_steps`
+--
+
+CREATE TABLE `loyalty_programs_steps` (
+  `ID` int(11) NOT NULL COMMENT 'ID',
+  `TOTAL` int(11) NOT NULL COMMENT 'Сумма покупок',
+  `CLIENT_GROUP_ID` int(11) NOT NULL COMMENT 'Группа',
+  `LOYALTY_PROGRAM_ID` int(11) NOT NULL COMMENT 'Программа лояльности'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `loyalty_programs_steps`
+--
+
+INSERT INTO `loyalty_programs_steps` (`ID`, `TOTAL`, `CLIENT_GROUP_ID`, `LOYALTY_PROGRAM_ID`) VALUES
+(1, 335, 2, 12),
+(13, 113, 1, 13),
+(14, 1134, 1, 13);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `migration`
+--
+
+CREATE TABLE `migration` (
+  `version` varchar(180) NOT NULL,
+  `apply_time` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `migration`
+--
+
+INSERT INTO `migration` (`version`, `apply_time`) VALUES
+('m000000_000000_base', 1493646236),
+('m130524_201442_init', 1493648308);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `money_accounts`
+--
+
+CREATE TABLE `money_accounts` (
+  `ID` int(11) NOT NULL COMMENT 'ID',
+  `NAME` varchar(75) NOT NULL COMMENT 'Название',
+  `TYPE` varchar(20) NOT NULL,
+  `BALANCE` float DEFAULT NULL COMMENT 'Баланс',
+  `USE_ON_CASHBOX` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `money_accounts`
+--
+
+INSERT INTO `money_accounts` (`ID`, `NAME`, `TYPE`, `BALANCE`, `USE_ON_CASHBOX`) VALUES
+(1, 'Наличка', 'CASH', 640706, 1),
+(2, 'Карта сбербанка', 'CARD', 4257, 1),
+(3, 'Счет в альфабанке', 'BANK_ACCOUNT', 0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `money_movements`
+--
+
+CREATE TABLE `money_movements` (
+  `ID` int(11) NOT NULL COMMENT 'ID',
+  `NAME` varchar(50) NOT NULL COMMENT 'Название',
+  `TYPE` varchar(100) NOT NULL COMMENT 'Тип',
+  `AMOUNT` int(11) NOT NULL COMMENT 'Сумма',
+  `MONEY_ACCOUNT` int(11) NOT NULL COMMENT 'Счет',
+  `MONEY_ACCOUNT_FROM` int(11) DEFAULT NULL COMMENT 'Со счета',
+  `ORDER_ID` int(11) DEFAULT NULL COMMENT 'ID заказа',
+  `DATE` datetime NOT NULL COMMENT 'Дата операции',
+  `COMMENT` text COMMENT 'Комментарий'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `money_movements`
+--
+
+INSERT INTO `money_movements` (`ID`, `NAME`, `TYPE`, `AMOUNT`, `MONEY_ACCOUNT`, `MONEY_ACCOUNT_FROM`, `ORDER_ID`, `DATE`, `COMMENT`) VALUES
+(4, 'INCOME 13.08.2017 17:17', 'INCOME', 33, 1, 0, 3, '2017-08-13 17:17:00', ''),
+(5, 'Доход 17:20', 'INCOME', 1000, 1, 0, 1, '1970-01-01 01:00:00', '33'),
+(6, 'CONSUMPTION 13.08.2017 17:21', 'CONSUMPTION', 323, 1, 0, 1, '2017-08-13 17:21:00', ''),
+(7, 'Доход 13.08.2017 17:22', 'INCOME', 1001, 1, 0, 2, '1970-01-01 01:00:00', '1233'),
+(8, 'CONSUMPTION 13.08.2017 17:22', 'CONSUMPTION', 1500, 1, 0, NULL, '2017-08-13 17:22:00', ''),
+(9, 'INCOME 13.08.2017 20:02', 'CONSUMPTION', 111, 1, 0, NULL, '1970-01-01 01:00:00', ''),
+(10, 'INCOME 01.08.2017 21:17', 'INCOME', 123, 1, 0, NULL, '2017-08-01 21:17:00', ''),
+(11, 'INCOME 16.08.2017 22:04', 'INCOME', 100, 1, 0, NULL, '2017-08-16 22:04:00', ''),
+(12, 'CONSUMPTION 16.08.2017 22:04', 'CONSUMPTION', 216, 1, 0, NULL, '2017-08-16 22:04:00', ''),
+(13, 'CONSUMPTION 17.08.2017 07:42', 'CONSUMPTION', 100, 1, 0, NULL, '2017-08-17 07:42:00', ''),
+(14, 'Доход 20.08.2017 21:44', 'INCOME', 123, 1, 0, NULL, '2017-08-20 21:44:00', ''),
+(15, 'Расход 20.08.2017 22:52', 'CONSUMPTION', 213123, 2, 0, NULL, '2017-09-03 21:04:00', ''),
+(16, 'Расход 20.08.2017 22:56', 'CONSUMPTION', 123123, 1, 0, NULL, '1970-01-01 01:00:00', ''),
+(17, 'Расход 20.08.2017 23:19', 'CONSUMPTION', 12316, 1, 0, NULL, '1970-01-01 01:00:00', ''),
+(18, 'Расход 20.08.2017 22:58', 'CONSUMPTION', 2133, 2, 0, NULL, '2017-09-03 20:53:00', ''),
+(19, 'Расход 03.09.2017 20:34', 'CONSUMPTION', 1, 2, 1, NULL, '1970-01-01 01:00:00', 'Тест дохода'),
+(20, 'Расход 03.09.2017 20:44', 'CONSUMPTION', 10, 1, NULL, NULL, '2017-09-03 21:15:00', '');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `auth_key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
+  `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `photo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `sex` smallint(6) NOT NULL DEFAULT '1',
+  `status` smallint(6) NOT NULL DEFAULT '10',
+  `created_at` int(11) NOT NULL,
+  `updated_at` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Дамп данных таблицы `user`
+--
+
+INSERT INTO `user` (`id`, `username`, `auth_key`, `password_hash`, `email`, `photo`, `sex`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'Administrator', 'RG6kZgooxV8oful04NTu0p-WzqZoD18M', '$2y$13$MHmPfMCpG/xNoqJm/W0AzeTZdGPmQhOe8POttQDeB0y8luni18LW6', 'administrator@example.com', NULL, 1, 2, 1493648308, 1493648455),
+(2, 'Moderator', '9STkmxCkF0xzsXHJCN5t3SpHSW1ngKr9', '$2y$13$s7/ro9JrMdK.zML3NObwGuD6.YBBMiUZ5f8sM0oN25ffneq/Gxqhe', 'moderator@example.com', NULL, 1, 2, 1493648308, 1493648308);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user_email_confirm_token`
+--
+
+CREATE TABLE `user_email_confirm_token` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `old_email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `old_email_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `old_email_confirm` smallint(6) DEFAULT '0',
+  `new_email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `new_email_token` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `new_email_confirm` smallint(6) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user_oauth_key`
+--
+
+CREATE TABLE `user_oauth_key` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `provider_id` int(11) DEFAULT NULL,
+  `provider_user_id` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `user_password_reset_token`
+--
+
+CREATE TABLE `user_password_reset_token` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Индексы сохранённых таблиц
+--
+
+--
+-- Индексы таблицы `auth_assignment`
+--
+ALTER TABLE `auth_assignment`
+  ADD PRIMARY KEY (`item_name`,`user_id`),
+  ADD KEY `auth_assignment_user_id_fk` (`user_id`);
+
+--
+-- Индексы таблицы `auth_item`
+--
+ALTER TABLE `auth_item`
+  ADD PRIMARY KEY (`name`),
+  ADD KEY `auth_item_rule_name_fk` (`rule_name`),
+  ADD KEY `auth_item_type_index` (`type`);
+
+--
+-- Индексы таблицы `auth_item_child`
+--
+ALTER TABLE `auth_item_child`
+  ADD PRIMARY KEY (`parent`,`child`),
+  ADD KEY `auth_item_child_child_fk` (`child`);
+
+--
+-- Индексы таблицы `auth_rule`
+--
+ALTER TABLE `auth_rule`
+  ADD PRIMARY KEY (`name`);
+
+--
+-- Индексы таблицы `CATALOG_PRODUCTS`
+--
+ALTER TABLE `CATALOG_PRODUCTS`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `CATALOG_SECTION_ID` (`CATALOG_SECTION_ID`);
+
+--
+-- Индексы таблицы `catalog_sections`
+--
+ALTER TABLE `catalog_sections`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `clients`
+--
+ALTER TABLE `clients`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `PHONE` (`PHONE`);
+
+--
+-- Индексы таблицы `clients_clients_groups`
+--
+ALTER TABLE `clients_clients_groups`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `CLIENT_ID` (`CLIENT_ID`),
+  ADD KEY `clients_clients_groups_ibfk_2` (`CLIENT_GROUP_ID`);
+
+--
+-- Индексы таблицы `clients_clients_types`
+--
+ALTER TABLE `clients_clients_types`
+  ADD PRIMARY KEY (`ID`),
+  ADD UNIQUE KEY `CLIENT_ID_3` (`CLIENT_ID`,`CLIENT_TYPE_ID`),
+  ADD KEY `CLIENT_ID` (`CLIENT_ID`),
+  ADD KEY `CLIENT_ID_2` (`CLIENT_ID`),
+  ADD KEY `CLIENT_TYPE_ID` (`CLIENT_TYPE_ID`);
+
+--
+-- Индексы таблицы `clients_events`
+--
+ALTER TABLE `clients_events`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `CLIENT_ID` (`CLIENT_ID`),
+  ADD KEY `EVENT_ID` (`EVENT_ID`),
+  ADD KEY `RECIPIENT_ID` (`GIFT_RECIPIENT_ID`);
+
+--
+-- Индексы таблицы `clients_gift_recipients`
+--
+ALTER TABLE `clients_gift_recipients`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `CLIENT_ID` (`CLIENT_ID`),
+  ADD KEY `RECIPIENT_ID` (`GIFT_RECIPIENT_ID`);
+
+--
+-- Индексы таблицы `clients_groups`
+--
+ALTER TABLE `clients_groups`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `LOYALTY_PROGRAM_ID` (`LOYALTY_PROGRAM_ID`);
+
+--
+-- Индексы таблицы `clients_types`
+--
+ALTER TABLE `clients_types`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `events`
+--
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `gift_recipients`
+--
+ALTER TABLE `gift_recipients`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `loyalty_programs`
+--
+ALTER TABLE `loyalty_programs`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `ID` (`ID`,`NAME`,`MAX_PERCENT`,`WELCOME_BONUS`);
+
+--
+-- Индексы таблицы `loyalty_programs_steps`
+--
+ALTER TABLE `loyalty_programs_steps`
+  ADD PRIMARY KEY (`ID`),
+  ADD KEY `GROUP_ID` (`CLIENT_GROUP_ID`),
+  ADD KEY `loyalty_programs_steps_ibfk_2` (`LOYALTY_PROGRAM_ID`);
+
+--
+-- Индексы таблицы `migration`
+--
+ALTER TABLE `migration`
+  ADD PRIMARY KEY (`version`);
+
+--
+-- Индексы таблицы `money_accounts`
+--
+ALTER TABLE `money_accounts`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `money_movements`
+--
+ALTER TABLE `money_movements`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Индексы таблицы `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `user_email_confirm_token`
+--
+ALTER TABLE `user_email_confirm_token`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_email_confirm_token_user_id_fk` (`user_id`);
+
+--
+-- Индексы таблицы `user_oauth_key`
+--
+ALTER TABLE `user_oauth_key`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_oauth_key_user_id_fk` (`user_id`);
+
+--
+-- Индексы таблицы `user_password_reset_token`
+--
+ALTER TABLE `user_password_reset_token`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_password_reset_token_user_id_fk` (`user_id`);
+
+--
+-- AUTO_INCREMENT для сохранённых таблиц
+--
+
+--
+-- AUTO_INCREMENT для таблицы `CATALOG_PRODUCTS`
+--
+ALTER TABLE `CATALOG_PRODUCTS`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `catalog_sections`
+--
+ALTER TABLE `catalog_sections`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=12;
+--
+-- AUTO_INCREMENT для таблицы `clients`
+--
+ALTER TABLE `clients`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+--
+-- AUTO_INCREMENT для таблицы `clients_clients_groups`
+--
+ALTER TABLE `clients_clients_groups`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
+-- AUTO_INCREMENT для таблицы `clients_clients_types`
+--
+ALTER TABLE `clients_clients_types`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+--
+-- AUTO_INCREMENT для таблицы `clients_events`
+--
+ALTER TABLE `clients_events`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+--
+-- AUTO_INCREMENT для таблицы `clients_gift_recipients`
+--
+ALTER TABLE `clients_gift_recipients`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `clients_groups`
+--
+ALTER TABLE `clients_groups`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT для таблицы `clients_types`
+--
+ALTER TABLE `clients_types`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `events`
+--
+ALTER TABLE `events`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `gift_recipients`
+--
+ALTER TABLE `gift_recipients`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT для таблицы `loyalty_programs`
+--
+ALTER TABLE `loyalty_programs`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+--
+-- AUTO_INCREMENT для таблицы `loyalty_programs_steps`
+--
+ALTER TABLE `loyalty_programs_steps`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=15;
+--
+-- AUTO_INCREMENT для таблицы `money_accounts`
+--
+ALTER TABLE `money_accounts`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=4;
+--
+-- AUTO_INCREMENT для таблицы `money_movements`
+--
+ALTER TABLE `money_movements`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID', AUTO_INCREMENT=21;
+--
+-- AUTO_INCREMENT для таблицы `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT для таблицы `user_email_confirm_token`
+--
+ALTER TABLE `user_email_confirm_token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `user_oauth_key`
+--
+ALTER TABLE `user_oauth_key`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT для таблицы `user_password_reset_token`
+--
+ALTER TABLE `user_password_reset_token`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Ограничения внешнего ключа сохраненных таблиц
+--
+
+--
+-- Ограничения внешнего ключа таблицы `auth_assignment`
+--
+ALTER TABLE `auth_assignment`
+  ADD CONSTRAINT `auth_assignment_item_name_fk` FOREIGN KEY (`item_name`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `auth_assignment_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `auth_item`
+--
+ALTER TABLE `auth_item`
+  ADD CONSTRAINT `auth_item_rule_name_fk` FOREIGN KEY (`rule_name`) REFERENCES `auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `auth_item_child`
+--
+ALTER TABLE `auth_item_child`
+  ADD CONSTRAINT `auth_item_child_child_fk` FOREIGN KEY (`child`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `auth_item_child_parent_fk` FOREIGN KEY (`parent`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `CATALOG_PRODUCTS`
+--
+ALTER TABLE `CATALOG_PRODUCTS`
+  ADD CONSTRAINT `catalog_products_ibfk_1` FOREIGN KEY (`CATALOG_SECTION_ID`) REFERENCES `catalog_sections` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Ограничения внешнего ключа таблицы `clients_clients_groups`
+--
+ALTER TABLE `clients_clients_groups`
+  ADD CONSTRAINT `clients_clients_groups_ibfk_1` FOREIGN KEY (`CLIENT_ID`) REFERENCES `clients` (`ID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `clients_clients_groups_ibfk_2` FOREIGN KEY (`CLIENT_GROUP_ID`) REFERENCES `clients_groups` (`ID`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `clients_clients_types`
+--
+ALTER TABLE `clients_clients_types`
+  ADD CONSTRAINT `clients_clients_types_ibfk_1` FOREIGN KEY (`CLIENT_ID`) REFERENCES `clients` (`ID`) ON DELETE CASCADE,
+  ADD CONSTRAINT `clients_clients_types_ibfk_2` FOREIGN KEY (`CLIENT_TYPE_ID`) REFERENCES `clients_types` (`ID`) ON DELETE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `clients_events`
+--
+ALTER TABLE `clients_events`
+  ADD CONSTRAINT `clients_events_ibfk_1` FOREIGN KEY (`CLIENT_ID`) REFERENCES `clients` (`ID`),
+  ADD CONSTRAINT `clients_events_ibfk_2` FOREIGN KEY (`EVENT_ID`) REFERENCES `events` (`ID`),
+  ADD CONSTRAINT `clients_events_ibfk_3` FOREIGN KEY (`GIFT_RECIPIENT_ID`) REFERENCES `gift_recipients` (`ID`);
+
+--
+-- Ограничения внешнего ключа таблицы `clients_gift_recipients`
+--
+ALTER TABLE `clients_gift_recipients`
+  ADD CONSTRAINT `clients_gift_recipients_ibfk_1` FOREIGN KEY (`CLIENT_ID`) REFERENCES `clients` (`ID`),
+  ADD CONSTRAINT `clients_gift_recipients_ibfk_2` FOREIGN KEY (`GIFT_RECIPIENT_ID`) REFERENCES `gift_recipients` (`ID`);
+
+--
+-- Ограничения внешнего ключа таблицы `clients_groups`
+--
+ALTER TABLE `clients_groups`
+  ADD CONSTRAINT `clients_groups_ibfk_1` FOREIGN KEY (`LOYALTY_PROGRAM_ID`) REFERENCES `loyalty_programs` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Ограничения внешнего ключа таблицы `loyalty_programs_steps`
+--
+ALTER TABLE `loyalty_programs_steps`
+  ADD CONSTRAINT `loyalty_programs_steps_ibfk_1` FOREIGN KEY (`CLIENT_GROUP_ID`) REFERENCES `clients_groups` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `loyalty_programs_steps_ibfk_2` FOREIGN KEY (`LOYALTY_PROGRAM_ID`) REFERENCES `loyalty_programs` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `user_email_confirm_token`
+--
+ALTER TABLE `user_email_confirm_token`
+  ADD CONSTRAINT `user_email_confirm_token_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `user_oauth_key`
+--
+ALTER TABLE `user_oauth_key`
+  ADD CONSTRAINT `user_oauth_key_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `user_password_reset_token`
+--
+ALTER TABLE `user_password_reset_token`
+  ADD CONSTRAINT `user_password_reset_token_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

@@ -92,6 +92,14 @@ class Clients extends Prototype
         return $this->hasMany(ClientsEvents::className(), ['CLIENT_ID' => 'ID']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrdersSchedules()
+    {
+        return $this->hasMany(OrdersSchedule::className(), ['CLIENT_ID' => 'ID'])->inverseOf('client');
+    }
+
 
     /**
      * After save element event handler
@@ -114,7 +122,7 @@ class Clients extends Prototype
             $obCCGroups->save(false);
         }
         catch(\Exception $e){
-            ?><pre><?print_r($e)?></pre><?
+            AddMessage2Log($e);
         }
     }
 }

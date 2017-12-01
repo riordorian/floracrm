@@ -72,6 +72,7 @@ class AdminAsset extends AssetBundle
 
         /*MAGNIFIC-POPUP*/
         'assets/admin/js/plugins/mgnfc-popup/jquery.magnific-popup.js',
+        '/assets/admin/css/plugins/mgnfc-popup/magnific-popup-custom.css',
 
         'assets/admin/js/inspinia.js',
         'assets/admin/js/crm.js',

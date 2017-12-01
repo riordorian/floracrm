@@ -166,11 +166,11 @@ $config = [
                 '/admin/clients-events/<action:>' => 'clients-events/<action>',
                 '/admin/loyalty-programs-steps/<action:>' => 'loyalty-programs-steps/<action>',
 
-
-
                 # TERMINAL
                 '/terminal/' => 'terminal/index/',
-                '/terminal/<action:>' => 'terminal/<action>',
+                '/terminal/orders-schedule/' => 'orders-schedule/index/',
+                '/terminal/orders-schedule/<action:>' => 'orders-schedule/<action>',
+
             ],
             'suffix' => '/',
         ],

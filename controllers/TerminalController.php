@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use \app\models\Clients;
+use app\models\OrdersSchedule;
 use budyaga\users\models\forms\LoginForm;
 use budyaga\users\models\User;
 use Yii;
@@ -57,6 +59,12 @@ class TerminalController extends \yii\web\Controller
         }
     }
 
+
+    /**
+     * Orders schedule
+     * 
+     * @return mixed
+     */
     public function actionCalendar()
     {
         if( Yii::$app->user->can('terminalWork') === false ){
@@ -64,7 +72,61 @@ class TerminalController extends \yii\web\Controller
             $this->redirect('/terminal/login/');
         }
         
-        return $this->render('calendar');
+        $arOrders = OrdersSchedule::find()->asArray()->all();
+		$arOrdersSchedule = [];
+		foreach($arOrders as $arOrder){
+			$arOrdersSchedule[] = [
+				'id' => $arOrder['ID'],
+				'title' => $arOrder['NAME'],
+				'start' => $arOrder['RECEIVING_DATE_START'],
+				'end' => $arOrder['RECEIVING_DATE_END'],
+				'durationEditable' => false,
+				'resourceEditable' => true,
+				'description' => $arOrder['COMMENT'],
+			];
+		}
+
+        return $this->render('calendar',
+            ['arOrders' => $arOrdersSchedule]
+        );
+    }
+
+    
+    public function actionClientsList()
+    {
+        if( Yii::$app->user->can('terminalWork') === false ){
+            Yii::$app->user->logout();
+            $this->redirect('/terminal/login/');
+        }
+
+        $arReq = \Yii::$app->getRequest()->getBodyParams();
+        $arClients = [];
+
+        if( !empty($arReq['QUERY']) ){
+            $obClients = new Clients();
+
+            if( (int)$arReq['QUERY'] > 0 && strlen($arReq['QUERY']) == 10 ){
+                $phone = '+7 (' . substr($arReq['QUERY'], 0, 3) . ') ' . substr($arReq['QUERY'], 3, 3) . '-' . substr($arReq['QUERY'], 6, 2) . '-' . substr($arReq['QUERY'], 8);
+                $arClients = $obClients
+                    ->find()
+                    ->where(['PHONE' => $phone])
+                    ->select([
+                        'ID',
+                        'NAME',
+                        'PHONE',
+                    ])
+                    ->asArray()
+                    ->all();
+            }
+            else{
+                $arClients = $obClients
+                    ->find()
+                    ->where(['like', 'NAME', '%' . $arReq['QUERY'] . '%', false])->asArray()->all();
+            }
+        }
+
+
+        echo json_encode($arClients);
     }
 
 }

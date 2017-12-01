@@ -102,6 +102,12 @@ class Cashperiods extends Prototype
         return $this->hasOne(User::className(), ['id' => 'USER_ID'])->inverseOf('cashperiods');
     }
 
+
+    /**
+     * Preparing fields
+     * 
+     * @return bool
+     */
     public function beforeValidate()
     {
         $arPost = Yii::$app->request->post();
@@ -122,6 +128,15 @@ class Cashperiods extends Prototype
         return parent::beforeValidate();
     }
 
+
+    /**
+     * After save elem handler
+     * 
+     * @param bool $insert
+     *
+     * @return bool
+     * @throws \yii\db\Exception
+     */
     public function beforeSave($insert)
     {
         $arPost = Yii::$app->request->post();

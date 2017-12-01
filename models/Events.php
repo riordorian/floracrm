@@ -41,4 +41,20 @@ class Events extends Prototype
             'NAME' => 'Название события',
         ];
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClientsEvents()
+    {
+        return $this->hasMany(ClientsEvents::className(), ['EVENT_ID' => 'ID'])->inverseOf('eVENT');
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrdersSchedules()
+    {
+        return $this->hasMany(OrdersSchedule::className(), ['EVENT_ID' => 'ID'])->inverseOf('event');
+    }
 }

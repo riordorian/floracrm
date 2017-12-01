@@ -2,6 +2,8 @@
 
 namespace app\controllers;
 
+use app\models\Events;
+use app\models\GiftRecipients;
 use Yii;
 use app\models\OrdersSchedule;
 use app\models\OrdersScheduleSearch;
@@ -51,6 +53,8 @@ class OrdersScheduleController extends Controller
      */
     public function actionView($id)
     {
+        $this->layout = 'empty.php';
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -63,13 +67,24 @@ class OrdersScheduleController extends Controller
      */
     public function actionCreate()
     {
+        $this->layout = 'empty.php';
         $model = new OrdersSchedule();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            return $this->render('view', [
+                'model' => $this->findModel($model->ID)
+            ]);
         } else {
+            # Getting of the gift recipients array
+            $arRecipients = GiftRecipients::getFilterValues();
+
+            # Getting of the gift recipients array
+            $arEvents = Events::getFilterValues();
+
             return $this->render('create', [
                 'model' => $model,
+                'arRecipients' => $arRecipients,
+                'arEvents' => $arEvents
             ]);
         }
     }

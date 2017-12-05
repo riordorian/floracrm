@@ -12,4 +12,4 @@ $this->title = 'Терминал';
 		<div class="terminal__sidebar-inner js-terminal__sidebar"></div>
 	</div>
 </div>
-<?= Html::a('<i class="fa fa-plus"></i>', ['create'], ['class' => 'btn btn-primary btn-lg btn-circle btn-add']) ?>
+<?//= Html::a('<i class="fa fa-plus"></i>', ['create'], ['class' => 'btn btn-primary btn-lg btn-circle btn-add']) ?>

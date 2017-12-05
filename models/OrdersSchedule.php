@@ -40,6 +40,11 @@ class OrdersSchedule extends \yii\db\ActiveRecord
     public $RECEIVING_TIME_START;
     public $RECEIVING_TIME_END;
     public $CLIENT;
+    public $EVENT;
+    public $GIFT_RECIPIENT;
+    public $OPERATOR;
+    public $SUM_FORMATTED;
+    public $PREPAYMENT_FORMATTED;
 
     /**
      * @inheritdoc
@@ -71,17 +76,22 @@ class OrdersSchedule extends \yii\db\ActiveRecord
             'NAME' => 'Название',
             'CLIENT' => 'Клиент (телефон)',
             'CLIENT_ID' => 'Клиент',
+            'GIFT_RECIPIENT' => 'Получатель',
             'GIFT_RECIPIENT_ID' => 'Получатель',
             'EVENT_ID' => 'Событие',
+            'EVENT' => 'Событие',
             'SUM' => 'Сумма заказа',
+            'SUM_FORMATTED' => 'Сумма заказа',
             'RECEIVING_DATE_START' => 'Подготовить с',
             'RECEIVING_TIME_START' => 'Подготовить с',
             'RECEIVING_DATE_END' => 'Подготовить до',
             'RECEIVING_TIME_END' => 'Подготовить до',
             'NEED_DELIVERY' => 'Требуется доставка',
             'OPERATOR_ID' => 'Флорист',
+            'OPERATOR' => 'Флорист',
             'STATUS' => 'Статус',
             'PREPAYMENT' => 'Предоплата',
+            'PREPAYMENT_FORMATTED' => 'Предоплата',
             'COMMENT' => 'Комментарий',
         ];
     }
@@ -110,7 +120,7 @@ class OrdersSchedule extends \yii\db\ActiveRecord
             if( !empty($this->RECEIVING_TIME_END) ){
                 $arTimeEnd = explode(':', $this->RECEIVING_TIME_END);
                 $obDate->setTime($arTimeEnd[0], $arTimeEnd[1]);
-                $this->RECEIVING_TIME_END = $obDate->format('Y-m-d H:i:s');
+                $this->RECEIVING_DATE_END = $obDate->format('Y-m-d H:i:s');
             }
             else{
                 $this->RECEIVING_DATE_END = $obDate->format('Y-m-d H:i:s');
@@ -170,23 +180,35 @@ class OrdersSchedule extends \yii\db\ActiveRecord
         $arAttrs = $this->getAttributes();
         
         if( !empty($arAttrs['GIFT_RECIPIENT_ID']) ){
-            $this->GIFT_RECIPIENT_ID = $this->getGiftRecipient()->one()['NAME'];
+            $this->GIFT_RECIPIENT = $this->getGiftRecipient()->one()['NAME'];
         }
 
         if( !empty($arAttrs['EVENT_ID']) ){
-            $this->EVENT_ID = $this->getEvent()->one()['NAME'];
+            $this->EVENT = $this->getEvent()->one()['NAME'];
+        }
+
+        if( !empty($arAttrs['CLIENT_ID']) ){
+            $this->CLIENT = $this->getClient()->one()['NAME'];
         }
 
         if( !empty($arAttrs['OPERATOR_ID']) ){
-            $this->OPERATOR_ID = $this->getOperator()->one()['username'];
+            $this->OPERATOR = $this->getOperator()->one()['username'];
         }
 
         if( !empty($arAttrs['SUM']) ){
-            $this->SUM .= ' <i class="fa fa-rub"></i>';
+            $this->SUM_FORMATTED = $arAttrs['SUM'] . ' <i class="fa fa-rub"></i>';
         }
 
         if( !empty($arAttrs['PREPAYMENT']) ){
-            $this->PREPAYMENT .= ' <i class="fa fa-rub"></i>';
+            $this->PREPAYMENT_FORMATTED = $arAttrs['PREPAYMENT'] . ' <i class="fa fa-rub"></i>';
+        }
+
+        if( !empty($arAttrs['RECEIVING_DATE_START']) ){
+            $this->RECEIVING_TIME_START = date('H:i', strtotime($arAttrs['RECEIVING_DATE_START']));
+        }
+
+        if( !empty($arAttrs['RECEIVING_DATE_END']) ){
+            $this->RECEIVING_TIME_END = date('H:i', strtotime($arAttrs['RECEIVING_DATE_END']));
         }
     }
 

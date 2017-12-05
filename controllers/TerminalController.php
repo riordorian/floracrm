@@ -91,7 +91,12 @@ class TerminalController extends \yii\web\Controller
         );
     }
 
-    
+
+    /**
+     * Getting clients list by phone or name
+     * 
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionClientsList()
     {
         if( Yii::$app->user->can('terminalWork') === false ){
@@ -128,5 +133,4 @@ class TerminalController extends \yii\web\Controller
 
         echo json_encode($arClients);
     }
-
 }

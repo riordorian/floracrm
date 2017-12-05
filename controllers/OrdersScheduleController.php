@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Events;
 use app\models\GiftRecipients;
+use Faker\Provider\DateTime;
 use Yii;
 use app\models\OrdersSchedule;
 use app\models\OrdersScheduleSearch;
@@ -97,15 +98,68 @@ class OrdersScheduleController extends Controller
      */
     public function actionUpdate($id)
     {
+        $this->layout = 'empty.php';
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->ID]);
+            return $this->render('view', [
+                'model' => $this->findModel($model->ID)
+            ]);
         } else {
+            # Getting of the gift recipients array
+            $arRecipients = GiftRecipients::getFilterValues();
+
+            # Getting of the gift recipients array
+            $arEvents = Events::getFilterValues();
+
             return $this->render('update', [
                 'model' => $model,
+                'arRecipients' => $arRecipients,
+                'arEvents' => $arEvents
             ]);
         }
+    }
+
+
+    /**
+     * Updating order date by dropping
+     */
+    public function actionChangeDate()
+    {
+        if( Yii::$app->user->can('terminalWork') === false ){
+            Yii::$app->user->logout();
+            $this->redirect('/terminal/login/');
+        }
+
+        $arReq = \Yii::$app->getRequest()->get();
+        if( !empty($arReq['ID']) && !empty($arReq['START']) ){
+            $obOrder = OrdersSchedule::find()->where(['ID' => $arReq['ID']])->one();
+
+            $timeDiff = strtotime($obOrder->RECEIVING_DATE_END) - strtotime($obOrder->RECEIVING_DATE_START);
+            $newEndDateTime = date('Y-m-d H:i:s', strtotime($arReq['START']) + $timeDiff);
+
+            try{
+                $obOrder->setAttributes([
+                    'ID' => $arReq['ID'],
+                    'RECEIVING_DATE_START' => $arReq['START'],
+                    'RECEIVING_DATE_END' => $newEndDateTime
+                ]);
+                
+                $obOrder->save();
+                
+                echo json_encode(['STATUS' => true]);
+            }
+            catch(\Exception $e){
+                Yii::trace($e->getMessage(), 'flower');
+                echo json_encode(['STATUS' => false, 'ERROR_MESSAGE' => 'Updating order error']);
+            }
+
+        }
+        else{
+            echo json_encode(['STATUS' => false, 'ERROR_MESSAGE' => 'Incorrect params']);
+        }
+
+
     }
 
     /**
@@ -118,7 +172,7 @@ class OrdersScheduleController extends Controller
     {
         $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['/terminal/']);
     }
 
     /**

@@ -57,4 +57,12 @@ class CatalogSections extends Prototype
     {
         return $this->hasMany(CatalogProducts::className(), ['CATALOG_SECTION_ID' => 'ID'])->inverseOf('cATALOGSECTION');
     }
+
+
+    public function beforeSave($insert)
+    {
+        parent::beforeSave($insert);
+
+        
+    }
 }

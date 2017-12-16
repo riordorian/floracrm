@@ -16,6 +16,7 @@ use Yii;
  * @property double $RETAIL_PRICE
  * @property integer $EXPIRATION_TIME
  * @property integer $MIN_COUNT
+ * @property integer $AMOUNT
  *
  * @property CatalogSections $cATALOGSECTION
  */
@@ -38,7 +39,7 @@ class CatalogProducts extends Prototype
     {
         return [
             [['NAME', 'CATALOG_SECTION_ID', 'BASE_PRICE', 'RETAIL_PRICE'], 'required'],
-            [['CATALOG_SECTION_ID', 'EXPIRATION_TIME', 'MIN_COUNT'], 'integer'],
+            [['CATALOG_SECTION_ID', 'EXPIRATION_TIME', 'MIN_COUNT', 'AMOUNT'], 'integer'],
             [['BASE_PRICE', 'RETAIL_PRICE'], 'number'],
             [['NAME', 'CODE'], 'string', 'max' => 70],
             [['UPLOAD'], 'file'],
@@ -62,6 +63,7 @@ class CatalogProducts extends Prototype
             'RETAIL_PRICE' => 'Розничная цена',
             'EXPIRATION_TIME' => 'Срок годности, дней',
             'MIN_COUNT' => 'Минимальный остаток',
+            'AMOUNT' => 'Количество',
         ];
     }
 
@@ -71,5 +73,10 @@ class CatalogProducts extends Prototype
     public function getCatalogSection()
     {
         return $this->hasOne(CatalogSections::className(), ['ID' => 'CATALOG_SECTION_ID'])->inverseOf('catalogProducts');
+    }
+
+    public function getGoodsSupplies()
+    {
+        return $this->hasMany(GoodsSupplies::className(), ['GOOD_ID' => 'ID'])->inverseOf('good');
     }
 }

@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
 <!--    --><?//= $form->field($model, 'ID') ?>
 
     <?= $form->field($model, 'NAME', ['options' => ['class' => 'col-md-3']])->textInput([
-        'class' => 'js-reload-field'
+        'class' => 'js-reload-field form-control',
     ]) ?>
 
 <!--    --><?//= $form->field($model, 'CODE') ?>

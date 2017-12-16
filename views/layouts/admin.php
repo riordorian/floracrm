@@ -70,6 +70,7 @@ AdminAsset::register($this);
                     <ul class="nav nav-second-level">
                         <li><a href="/admin/catalog-sections/">Категории товаров</a></li>
                         <li><a href="/admin/catalog-products/">Товары</a></li>
+                        <li><a href="/admin/good-supply/">Поставки</a></li>
                     </ul>
                 </li>
                 <li>
@@ -81,6 +82,7 @@ AdminAsset::register($this);
                         <li class=""><a href="/admin/clients-types/">Типы клиентов</a></li>
                         <li class=""><a href="/admin/events/">Типы событий</a></li>
                         <li class=""><a href="/admin/gift-recipients/">Типы получателей</a></li>
+                        <li class=""><a href="/admin/providers/">Поставщики</a></li>
                     </ul>
                 </li>
                 <li>

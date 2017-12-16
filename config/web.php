@@ -147,6 +147,12 @@ $config = [
                 '/admin/catalog-products/' => 'catalog-products/index/',
                 '/admin/catalog-products/<action:>' => 'catalog-products/<action>',
 
+                '/admin/providers/' => 'providers/index/',
+                '/admin/providers/<action:>' => 'providers/<action>',
+
+                '/admin/good-supply/' => 'good-supply/index/',
+                '/admin/good-supply/<action:>' => 'good-supply/<action>',
+
                 '/admin/money-accounts/' => 'money-accounts/index/',
                 '/admin/money-accounts/<action:>' => 'money-accounts/<action>',
 
@@ -170,6 +176,8 @@ $config = [
                 '/terminal/' => 'terminal/index/',
                 '/terminal/orders-schedule/' => 'orders-schedule/index/',
                 '/terminal/orders-schedule/<action:>' => 'orders-schedule/<action>',
+                '/terminal/orders/' => 'orders/index/',
+                '/terminal/orders/<action:>' => 'orders/<action>',
 
             ],
             'suffix' => '/',

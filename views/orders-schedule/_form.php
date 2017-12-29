@@ -35,7 +35,7 @@ $moneyFieldTemplate = "<div class='form-group'>
     <?= $form->field($model, 'CLIENT')->textInput(['class' => 'js-autocomplete-user form-control', 'placeholder' => '9998887755 или ФИО']); ?>
 
     <?= $form->field($model, 'CLIENT_ID')->hiddenInput(['class' => 'js-client-id-field'])->label(false); ?>
-
+    
     <?= $form->field($model, 'GIFT_RECIPIENT_ID')->dropDownList($arRecipients, ['prompt' => 'Выберите получателя', 'class' => 'js-widget chosen']); ?>
 
     <?= $form->field($model, 'EVENT_ID')->dropDownList($arEvents, ['prompt' => 'Выберите событие', 'class' => 'js-widget chosen']); ?>

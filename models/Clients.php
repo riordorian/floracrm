@@ -122,7 +122,72 @@ class Clients extends Prototype
             $obCCGroups->save(false);
         }
         catch(\Exception $e){
-            AddMessage2Log($e);
+            Yii::trace($e->getMessage(), 'flower');
         }
+    }
+
+
+    public static function getClientsByNameOrPhone($query)
+    {
+        $arClients = [];
+
+        if( !empty($query) ){
+            $obClients = new Clients();
+
+            if( (int)$query > 0 && strlen($query) == 10 ){
+                $phone = '+7 (' . substr($query, 0, 3) . ') ' . substr($query, 3, 3) . '-' . substr($query, 6, 2) . '-' . substr($query, 8);
+                $arClients = $obClients
+                    ->find()
+                    ->where(['PHONE' => $phone])
+                    ->select([
+                        'ID',
+                        'NAME',
+                        'PHONE',
+                    ])
+                    ->asArray()
+                    ->all();
+            }
+            else{
+                $arClients = $obClients
+                    ->find()
+                    ->where(['like', 'NAME', '%' . $query . '%', false])->asArray()->all();
+            }
+        }
+
+        return $arClients;
+    }
+
+
+    /**
+     * Getting client discount
+     *
+     * @param $userId
+     *
+     * @return array
+     */
+    public static function getClientDiscounts($userId)
+    {
+        $arDiscounts = [
+            'DISCOUNT' => 0,
+            'BONUS' => 0,
+        ];
+        if( !empty($userId) ){
+            $obClients = new Clients();
+            $arUser = $obClients->find()->where([
+                'ID' => $userId
+            ])->with(['clientsClientsGroups', 'clientsClientsGroups.clientsGroups', 'clientsClientsGroups.clientsGroups.loyaltyPrograms'])->asArray()->one();
+
+            $val = $arUser['clientsClientsGroups']['clientsGroups']['PERCENT'];
+            if( $arUser['clientsClientsGroups']['clientsGroups']['loyaltyPrograms']['CODE'] == 'BONUS' ){
+                $arDiscounts['BONUS'] = $val;
+                $arDiscounts['CLIENT_BONUS'] = !empty($arUser['BONUS']) ? $arUser['BONUS'] : 0;
+                $arDiscounts['MAX_DISCOUNT'] = $arUser['clientsClientsGroups']['clientsGroups']['loyaltyPrograms']['MAX_PERCENT'];
+            }
+            else{
+                $arDiscounts['DISCOUNT'] = $val;
+            }
+        }
+        
+        return $arDiscounts;
     }
 }

@@ -2,13 +2,16 @@
 
 namespace app\controllers;
 
+use app\models\CatalogProducts;
 use app\models\CatalogSections;
 use app\models\Events;
 use app\models\GiftRecipients;
+use app\models\Operators;
 use Faker\Provider\DateTime;
 use Yii;
 use app\models\OrdersSchedule;
 use app\models\OrdersScheduleSearch;
+use yii\imagine\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -43,138 +46,114 @@ class OrdersController extends Controller
      */
     public function actionIndex()
     {
-        $arCategories = CatalogSections::find()->asArray()->all();
-        foreach($arCategories as &$arCategory){
-            if( empty($arCategory['IMAGE']) ){
-                $image = '/assets/terminal/img/dummy.jpg';
-            }
-            else{
-                $image = $arCategory['IMAGE'];
-            }
-
-            $arCategory['IMAGE'] = $image;
-        }
-        unset($arCategory);
-        
-        return $this->render($this->viewPath . 'index', [
-            'arCategories' => $arCategories
-        ]);
-    }
-
-    /**
-     * Displays a single OrdersSchedule model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionView($id)
-    {
-        $this->layout = 'empty.php';
-        
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
-
-    /**
-     * Creates a new OrdersSchedule model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $this->layout = 'empty.php';
-        $model = new OrdersSchedule();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->render('view', [
-                'model' => $this->findModel($model->ID)
-            ]);
-        } else {
-            # Getting of the gift recipients array
-            $arRecipients = GiftRecipients::getFilterValues();
-
-            # Getting of the gift recipients array
-            $arEvents = Events::getFilterValues();
-
-            return $this->render('create', [
-                'model' => $model,
-                'arRecipients' => $arRecipients,
-                'arEvents' => $arEvents
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing OrdersSchedule model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $this->layout = 'empty.php';
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->render('view', [
-                'model' => $this->findModel($model->ID)
-            ]);
-        } else {
-            # Getting of the gift recipients array
-            $arRecipients = GiftRecipients::getFilterValues();
-
-            # Getting of the gift recipients array
-            $arEvents = Events::getFilterValues();
-
-            return $this->render('update', [
-                'model' => $model,
-                'arRecipients' => $arRecipients,
-                'arEvents' => $arEvents
-            ]);
-        }
-    }
-
-
-    /**
-     * Updating order date by dropping
-     */
-    public function actionChangeDate()
-    {
         if( Yii::$app->user->can('terminalWork') === false ){
             Yii::$app->user->logout();
             $this->redirect('/terminal/login/');
         }
 
-        $arReq = \Yii::$app->getRequest()->get();
-        if( !empty($arReq['ID']) && !empty($arReq['START']) ){
-            $obOrder = OrdersSchedule::find()->where(['ID' => $arReq['ID']])->one();
+        
+        $arCategories = CatalogSections::find()->asArray()->all();
+        $arOperstors = Operators::getList();
 
-            $timeDiff = strtotime($obOrder->RECEIVING_DATE_END) - strtotime($obOrder->RECEIVING_DATE_START);
-            $newEndDateTime = date('Y-m-d H:i:s', strtotime($arReq['START']) + $timeDiff);
+        return $this->render($this->viewPath . 'index', [
+            'arCategories' => $arCategories,
+            'arOperators' => $arOperstors
+        ]);
+    }
 
-            try{
-                $obOrder->setAttributes([
-                    'ID' => $arReq['ID'],
-                    'RECEIVING_DATE_START' => $arReq['START'],
-                    'RECEIVING_DATE_END' => $newEndDateTime
-                ]);
-                
-                $obOrder->save();
-                
-                echo json_encode(['STATUS' => true]);
-            }
-            catch(\Exception $e){
-                Yii::trace($e->getMessage(), 'flower');
-                echo json_encode(['STATUS' => false, 'ERROR_MESSAGE' => 'Updating order error']);
-            }
 
+    /**
+     * Getting products list
+     * 
+     * @param int    $categoryId
+     * @param string $name
+     *
+     * @return string
+     */
+    public function actionGoodsList($categoryId = 0, $name = '')
+    {
+        $this->layout = 'empty';
+        $rsGoods = CatalogProducts::find();
+        if( !empty($categoryId) ){
+            $rsGoods->andWhere(['CATALOG_SECTION_ID' => $categoryId]);
         }
-        else{
+        if( !empty($name) ){
+            $rsGoods->andWhere(['like', 'NAME', $name]);
+        }
+
+        $arGoods = $rsGoods->asArray()->all();
+        
+        return $this->render($this->viewPath . 'goods-list', [
+            'arGoods' => $arGoods
+        ]);
+    }
+
+
+    /**
+     * Getting products sections list
+     * 
+     * @return string
+     */
+    public function actionSectionsList()
+    {
+        $this->layout = 'empty';
+        $arSections = CatalogSections::find()->asArray()->all();
+
+        return $this->render($this->viewPath . 'sections-list', [
+            'arSections' => $arSections
+        ]);
+    }
+
+
+    /**
+     * Updating good info
+     * 
+     * @param $goodId
+     */
+    public function actionUpdateInfo($goodId)
+    {
+        $this->layout = 'empty';
+        if( empty($goodId) ){
             echo json_encode(['STATUS' => false, 'ERROR_MESSAGE' => 'Incorrect params']);
         }
+        
+        $arGood = CatalogProducts::find()->where(['ID' => $goodId])->asArray()->one();
 
+        echo json_encode($arGood);
+    }
+
+
+
+    /**
+     * Getting client discounts
+     *
+     * @return mixed
+     * @throws \yii\base\InvalidConfigException
+     */
+    public function actionGetUserDiscounts()
+    {
+        $arReq = \Yii::$app->getRequest()->getBodyParams();
+
+        if( !empty($arReq['USER_ID']) ){
+            $arDiscounts = Clients::getClientDiscounts($arReq['USER_ID']);
+        }
+
+        return json_encode($arDiscounts);
 
     }
+    
+    public function actionSale()
+    {
+        $arReq = \Yii::$app->getRequest()->getBodyParams();
+        $this->layout = 'empty';
+
+        return $this->render('sale.php', [
+            'total' => $arReq['TOTAL'],
+            'discount' => $arReq['DISCOUNT'],
+        ]);
+    }
+
+
 
     /**
      * Deletes an existing OrdersSchedule model.

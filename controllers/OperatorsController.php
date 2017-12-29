@@ -37,11 +37,15 @@ class OperatorsController extends AdminController
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find(),
+            'query' => Operators::getList([
+                'RETURN_TYPE' => 'QUERY'
+            ]),
         ]);
+        
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+//            'arOperators' => []
         ]);
     }
 

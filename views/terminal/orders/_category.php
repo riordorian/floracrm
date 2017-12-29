@@ -1,22 +1,12 @@
-<div class="col-md-4">
+<div class="col-md-3 col-sm-3 col-xs-6 js-category-item" data-category-id="<?=$arCategory['ID']?>">
 	<div class="ibox">
 		<div class="ibox-content product-box">
 
 			<div class="product-imitation">
-				<img class="img-responsive" src="<?=$arCategory['IMAGE']?>" >
+				<img class="product-image" src="<?=$arCategory['IMAGE']?>" >
 			</div>
 			<div class="product-desc">
-										<span class="product-price">
-											10 <i class="fa fa-rub"></i>
-										</span>
-				<small class="text-muted">Category</small>
-				<a href="#" class="product-name"> Product</a>
-
-
-
-				<div class="text-righ">
-					<span class="link">Остаток: 10</span>
-				</div>
+				<a href="#" class="product-name"> <?=$arCategory['NAME']?></a>
 			</div>
 		</div>
 	</div>

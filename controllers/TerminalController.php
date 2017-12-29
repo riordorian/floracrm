@@ -3,6 +3,10 @@
 namespace app\controllers;
 
 use \app\models\Clients;
+use app\models\ClientsClientsGroups;
+use app\models\ClientsClientsTypes;
+use app\models\ClientsGroups;
+use app\models\ClientsTypes;
 use app\models\OrdersSchedule;
 use budyaga\users\models\forms\LoginForm;
 use budyaga\users\models\User;
@@ -107,30 +111,38 @@ class TerminalController extends \yii\web\Controller
         $arReq = \Yii::$app->getRequest()->getBodyParams();
         $arClients = [];
 
-        if( !empty($arReq['QUERY']) ){
-            $obClients = new Clients();
-
-            if( (int)$arReq['QUERY'] > 0 && strlen($arReq['QUERY']) == 10 ){
-                $phone = '+7 (' . substr($arReq['QUERY'], 0, 3) . ') ' . substr($arReq['QUERY'], 3, 3) . '-' . substr($arReq['QUERY'], 6, 2) . '-' . substr($arReq['QUERY'], 8);
-                $arClients = $obClients
-                    ->find()
-                    ->where(['PHONE' => $phone])
-                    ->select([
-                        'ID',
-                        'NAME',
-                        'PHONE',
-                    ])
-                    ->asArray()
-                    ->all();
-            }
-            else{
-                $arClients = $obClients
-                    ->find()
-                    ->where(['like', 'NAME', '%' . $arReq['QUERY'] . '%', false])->asArray()->all();
-            }
-        }
+        $arClients = Clients::getClientsByNameOrPhone($arReq['QUERY']);
 
 
         echo json_encode($arClients);
+    }
+
+
+    /**
+     * Adding new client
+     *
+     * @return string
+     */
+    public function actionClientAdd()
+    {
+        $obClients = new Clients();
+        if( $obClients->load(Yii::$app->request->post()) && $obClients->save(true) ){
+           return '';
+        }
+        else{
+            $this->layout = 'empty';
+            $arCTypes = ClientsTypes::getFilterValues();
+
+            return $this->render('_client-form.php', [
+                'model' => $obClients,
+                'modelCTypes' => new ClientsTypes(),
+                'modelCCTypes' => new ClientsClientsTypes(),
+                'modelCCGroups' => new ClientsClientsGroups(),
+                'arCTypes' => ClientsTypes::getFilterValues(),
+                'arCGroups' => ClientsGroups::getFilterValues(),
+                'bDefCTypeChecked' => current(array_keys($arCTypes)),
+                'nameLabel' => $obClients->getAttributeLabel('NAME')
+            ]);
+        }
     }
 }

@@ -43,6 +43,7 @@ class TerminalAsset extends AssetBundle
 
         '/assets/admin/css/style.css',
         '/assets/terminal/css/style.css?',
+        '/assets/terminal/css/responsive.css?',
 
     ];
     public $js = [
@@ -60,6 +61,9 @@ class TerminalAsset extends AssetBundle
 
         /*MAGNIFIC-POPUP*/
         'assets/admin/js/plugins/mgnfc-popup/jquery.magnific-popup.js',
+
+        /*MASKED INPUT*/
+        'assets/admin/js/plugins/jasny/jasny-bootstrap.min.js',
 
         'assets/admin/js/bootstrap.js',
         'assets/terminal/js/fullcalendar/moment.min.js',

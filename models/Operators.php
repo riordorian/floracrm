@@ -63,4 +63,24 @@ class Operators extends User
 
         return $model;
     }
+
+
+    /**
+     * Getting operators list
+     *
+     * @return $this
+     */
+    public static function getList($arParams = [])
+    {
+        $query = User::find()
+            ->leftJoin('auth_assignment as aa', 'id=aa.user_id')
+            ->where(['ACTIVE' => 'Y', 'aa.item_name' => 'operator']);
+
+        if( empty($arParams['RETURN_TYPE']) || $arParams['RETURN_TYPE'] != 'QUERY' ){
+            $query->asArray();
+        }
+        $arRes = $query->all();
+
+        return $arRes;
+    }
 }

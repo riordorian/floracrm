@@ -80,27 +80,32 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 			<div class="terminal__order-info">
-				<form action="/terminal/sale/">
+				<form action="/terminal/orders/sale/">
 					<div class="prices col-md-12">
 						<p>
 							<span>Подытог</span>
-							<span class="pull-right"><span>700</span> <i class="fa fa-rub"></i></span>
-							<input type="hidden" class="js-sum" name="SUM" value="700">
+							<span class="pull-right"><span>0</span> <i class="fa fa-rub"></i></span>
+							<input type="hidden" class="js-sum" name="SUM" value="0">
 						</p>
 						<p>
 							<span>Скидка</span>
 							<span class="pull-right"><span>0</span> <i class="fa fa-rub"></i></span>
-							<input type="hidden" class="js-discount" name="DISCOUNT" value="">
+							<input type="hidden" class="js-discount" name="DISCOUNT" value="0">
 						</p>
 						<p>
 							<span>Баллы</span>
-							<span class="pull-right"><span>700</span> </span>
-							<input type="hidden" class="js-bonus" name="BONUS" value="">
+							<span class="pull-right"><span>0</span> </span>
+							<input type="hidden" class="js-bonus-limit" name="BONUS" value="0">
+						</p>
+						<p>
+							<span>Баллов за покупку</span>
+							<span class="pull-right"><span>0</span> </span>
+							<input type="hidden" class="js-bonus" name="BONUS" value="0">
 						</p>
 						<p>
 							<span>Предоплата</span>
 							<span class="pull-right"><span>0</span> <i class="fa fa-rub"></i></span>
-							<input type="hidden" class="js-prepayment" name="PREPAYMENT" value="">
+							<input type="hidden" class="js-prepayment" name="PREPAYMENT" value="0">
 						</p>
 
 						<input type="hidden" name="CLIENT_ID" class="js-client-id-field">
@@ -110,7 +115,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<div class="col-md-6"><b>ОПЛАТА</b></div>
 						<div class="col-md-6 text-right">
 							<b>
-								<span>10 000</span> <i class="fa fa-rub"></i>
+								<span>0</span> <i class="fa fa-rub"></i>
 							</b>
 							<input type="hidden" class="js-final-sum" name="TOTAL" value="">
 						</div>

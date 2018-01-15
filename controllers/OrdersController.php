@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\CatalogProducts;
 use app\models\CatalogSections;
+use app\models\Clients;
 use app\models\Events;
 use app\models\GiftRecipients;
 use app\models\Operators;
@@ -141,15 +142,26 @@ class OrdersController extends Controller
         return json_encode($arDiscounts);
 
     }
-    
+
+
+    /**
+     * Open sale popup
+     * 
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionSale()
     {
-        $arReq = \Yii::$app->getRequest()->getBodyParams();
+        $arReq = \Yii::$app->request->getBodyParams();
         $this->layout = 'empty';
-
-        return $this->render('sale.php', [
-            'total' => $arReq['TOTAL'],
-            'discount' => $arReq['DISCOUNT'],
+        
+        return $this->render('/terminal/sale.php', [
+            'total' => empty($arReq['TOTAL']) ? 0 : $arReq['TOTAL'],
+            'discount' => empty($arReq['DISCOUNT']) ? 0 : $arReq['DISCOUNT'],
+            'bonus' => empty($arReq['BONUS']) ? 0 : $arReq['BONUS'],
+            'prepayment' => empty($arReq['PREPAYMENT']) ? 0 : $arReq['PREPAYMENT'],
+            'clientId' => empty($arReq['CLIENT_ID']) ? 0 : $arReq['CLIENT_ID'],
+            'sum' => empty($arReq['SUM']) ? 0 : $arReq['SUM'],
         ]);
     }
 

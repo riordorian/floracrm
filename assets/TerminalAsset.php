@@ -18,7 +18,7 @@ class TerminalAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        '/assets/admin/css/bootstrap.css?1',
+        '/assets/admin/css/bootstrap.css?2',
         '/assets/admin/css/loader.css',
 
         /*CHOSEN*/

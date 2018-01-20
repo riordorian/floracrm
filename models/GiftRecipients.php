@@ -55,8 +55,8 @@ class GiftRecipients extends Prototype
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrdersSchedules()
+    public function getOrders()
     {
-        return $this->hasMany(OrdersSchedule::className(), ['GIFT_RECIPIENT_ID' => 'ID'])->inverseOf('giftRecipient');
+        return $this->hasMany(Orders::className(), ['GIFT_RECIPIENT_ID' => 'ID'])->inverseOf('giftRecipient');
     }
 }

@@ -53,8 +53,8 @@ class Events extends Prototype
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrdersSchedules()
+    public function getOrders()
     {
-        return $this->hasMany(OrdersSchedule::className(), ['EVENT_ID' => 'ID'])->inverseOf('event');
+        return $this->hasMany(Orders::className(), ['EVENT_ID' => 'ID'])->inverseOf('event');
     }
 }

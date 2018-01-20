@@ -5,12 +5,12 @@ namespace app\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\OrdersSchedule;
+use app\models\Orders;
 
 /**
- * OrdersScheduleSearch represents the model behind the search form about `app\models\OrdersSchedule`.
+ * OrdersSearch represents the model behind the search form about `app\models\Orders`.
  */
-class OrdersScheduleSearch extends OrdersSchedule
+class OrdersSearch extends Orders
 {
     /**
      * @inheritdoc
@@ -42,7 +42,7 @@ class OrdersScheduleSearch extends OrdersSchedule
      */
     public function search($params)
     {
-        $query = OrdersSchedule::find();
+        $query = Orders::find();
 
         // add conditions that should always apply here
 

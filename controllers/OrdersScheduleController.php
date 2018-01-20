@@ -6,14 +6,14 @@ use app\models\Events;
 use app\models\GiftRecipients;
 use Faker\Provider\DateTime;
 use Yii;
-use app\models\OrdersSchedule;
-use app\models\OrdersScheduleSearch;
+use app\models\Orders;
+use app\models\OrdersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OrdersScheduleController implements the CRUD actions for OrdersSchedule model.
+ * OrdersScheduleController implements the CRUD actions for Orders model.
  */
 class OrdersScheduleController extends Controller
 {
@@ -33,12 +33,12 @@ class OrdersScheduleController extends Controller
     }
 
     /**
-     * Lists all OrdersSchedule models.
+     * Lists all Orders models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new OrdersScheduleSearch();
+        $searchModel = new OrdersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -48,7 +48,7 @@ class OrdersScheduleController extends Controller
     }
 
     /**
-     * Displays a single OrdersSchedule model.
+     * Displays a single Orders model.
      * @param integer $id
      * @return mixed
      */
@@ -62,14 +62,14 @@ class OrdersScheduleController extends Controller
     }
 
     /**
-     * Creates a new OrdersSchedule model.
+     * Creates a new Orders model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
         $this->layout = 'empty.php';
-        $model = new OrdersSchedule();
+        $model = new Orders();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->render('view', [
@@ -91,7 +91,7 @@ class OrdersScheduleController extends Controller
     }
 
     /**
-     * Updates an existing OrdersSchedule model.
+     * Updates an existing Orders model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -133,7 +133,7 @@ class OrdersScheduleController extends Controller
 
         $arReq = \Yii::$app->getRequest()->get();
         if( !empty($arReq['ID']) && !empty($arReq['START']) ){
-            $obOrder = OrdersSchedule::find()->where(['ID' => $arReq['ID']])->one();
+            $obOrder = Orders::find()->where(['ID' => $arReq['ID']])->one();
 
             $timeDiff = strtotime($obOrder->RECEIVING_DATE_END) - strtotime($obOrder->RECEIVING_DATE_START);
             $newEndDateTime = date('Y-m-d H:i:s', strtotime($arReq['START']) + $timeDiff);
@@ -163,7 +163,7 @@ class OrdersScheduleController extends Controller
     }
 
     /**
-     * Deletes an existing OrdersSchedule model.
+     * Deletes an existing Orders model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -176,15 +176,15 @@ class OrdersScheduleController extends Controller
     }
 
     /**
-     * Finds the OrdersSchedule model based on its primary key value.
+     * Finds the Orders model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return OrdersSchedule the loaded model
+     * @return Orders the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = OrdersSchedule::findOne($id)) !== null) {
+        if (($model = Orders::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

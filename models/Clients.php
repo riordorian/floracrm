@@ -95,9 +95,9 @@ class Clients extends Prototype
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrdersSchedules()
+    public function getOrders()
     {
-        return $this->hasMany(OrdersSchedule::className(), ['CLIENT_ID' => 'ID'])->inverseOf('client');
+        return $this->hasMany(Orders::className(), ['CLIENT_ID' => 'ID'])->inverseOf('client');
     }
 
 

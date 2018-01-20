@@ -17,7 +17,6 @@ use Yii;
  * @property string $RECEIVING_DATE_START
  * @property string $RECEIVING_DATE_END
  * @property integer $NEED_DELIVERY
- * @property integer $OPERATOR_ID
  * @property string $STATUS
  * @property double $PREPAYMENT
  * @property string $COMMENT
@@ -25,9 +24,9 @@ use Yii;
  * @property Clients $cLIENT
  * @property Events $eVENT
  * @property GiftRecipients $gIFTRECIPIENT
- * @property User $oPERATOR
+ * * @property OrdersOperators[] $ordersOperators
  */
-class OrdersSchedule extends \yii\db\ActiveRecord
+class Orders extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -47,22 +46,70 @@ class OrdersSchedule extends \yii\db\ActiveRecord
     public $PREPAYMENT_FORMATTED;
 
     /**
+     * Orders types
+     * P - preorder
+     * W - work
+     * S - sale
+     * B - bouquet
+     * @var array
+     */
+    public $arOrdersTypes = [
+        'P' => [],
+        'W' => [],
+        'S' => [],
+        'B' => [],
+    ];
+    /**
+     * Orders statuses
+     * N - not started
+     * P - process
+     * C - collected
+     * D - done
+     * S - shipped
+     * F - finished
+     * @var array
+     */
+    public $arStateStatuses = [
+        'N' => '',
+        'P' => '',
+        'C' => '',
+        'D' => '',
+        'S' => '',
+        'F' => '',
+    ];
+    /**
+     * Orders payment statuses
+     * N - not payed
+     * P - payed partly
+     * F - fully payed
+     * W - without payment
+     * @var array
+     */
+    public $arPayingStatuses = [
+        'N' => '',
+        'P' => '',
+        'F' => '',
+        'W' => '',
+    ];
+
+    /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['NAME', 'CLIENT_ID', ], 'required'],
-            [['CLIENT_ID', 'GIFT_RECIPIENT_ID', 'EVENT_ID', 'NEED_DELIVERY', 'OPERATOR_ID'], 'integer'],
-            [['SUM', 'PREPAYMENT'], 'number'],
-            [['RECEIVING_DATE_START', 'RECEIVING_DATE_END'], 'safe'],
+            [['NAME', ], 'required'],
+            [['CLIENT_ID', 'GIFT_RECIPIENT_ID', 'EVENT_ID', 'NEED_DELIVERY'], 'integer'],
+            [['TOTAL', 'PREPAYMENT', 'DISCOUNT'], 'number'],
+            [['RECEIVING_DATE_START', 'RECEIVING_DATE_END', 'CLOSING_DATE'], 'safe'],
             [['COMMENT', 'RECEIVING_TIME_START', 'RECEIVING_TIME_END'], 'string'],
             [['NAME'], 'string', 'max' => 50],
-            [['STATUS'], 'string', 'max' => 30],
+            [['STATUS'], 'string', 'max' => 3],
+            [['PAYMENT_STATUS'], 'string', 'max' => 3],
+            [['TYPE'], 'string', 'max' => 3],
             [['CLIENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => Clients::className(), 'targetAttribute' => ['CLIENT_ID' => 'ID']],
             [['EVENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => Events::className(), 'targetAttribute' => ['EVENT_ID' => 'ID']],
             [['GIFT_RECIPIENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => GiftRecipients::className(), 'targetAttribute' => ['GIFT_RECIPIENT_ID' => 'ID']],
-//            [['OPERATOR_ID'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['OPERATOR_ID' => 'id']],
         ];
     }
 
@@ -135,16 +182,16 @@ class OrdersSchedule extends \yii\db\ActiveRecord
         parent::afterSave($insert, $changedAttributes);
         $arAttrs = $this->getAttributes();
         $arOldAttrs = $this->getOldAttributes();
-
+        
         # If added new order and filled gift recipient field
         # or old gift recipient id is not equal to new gift recipient id
         # or old event id is not equal to new event id
         # and not empty event id
         # and not gift recipient id
         # then we adding new client event
-        if( ($insert && !empty($arAttrs['GIFT_RECIPIENT_ID'])
-            || $arOldAttrs['GIFT_RECIPIENT_ID'] != $arAttrs['GIFT_RECIPIENT_ID']
-            || $arOldAttrs['EVENT_ID'] != $arAttrs['EVENT_ID']) && !empty($arAttrs['EVENT_ID']) && !empty($arAttrs['GIFT_RECIPIENT_ID']) ){
+        if( ($insert || $arOldAttrs['GIFT_RECIPIENT_ID'] != $arAttrs['GIFT_RECIPIENT_ID']
+                || $arOldAttrs['EVENT_ID'] != $arAttrs['EVENT_ID'])
+            && !empty($arAttrs['EVENT_ID']) && !empty($arAttrs['GIFT_RECIPIENT_ID']) ){
             $arClientEvent = ClientsEvents::find()->where([
                 'CLIENT_ID' => $arAttrs['CLIENT_ID'],
                 'EVENT_ID' => $arAttrs['EVENT_ID'],
@@ -218,7 +265,7 @@ class OrdersSchedule extends \yii\db\ActiveRecord
      */
     public function getClient()
     {
-        return $this->hasOne(Clients::className(), ['ID' => 'CLIENT_ID'])->inverseOf('ordersSchedules');
+        return $this->hasOne(Clients::className(), ['ID' => 'CLIENT_ID'])->inverseOf('orders');
     }
 
     /**
@@ -226,7 +273,7 @@ class OrdersSchedule extends \yii\db\ActiveRecord
      */
     public function getEvent()
     {
-        return $this->hasOne(Events::className(), ['ID' => 'EVENT_ID'])->inverseOf('ordersSchedules');
+        return $this->hasOne(Events::className(), ['ID' => 'EVENT_ID'])->inverseOf('orders');
     }
 
     /**
@@ -234,14 +281,12 @@ class OrdersSchedule extends \yii\db\ActiveRecord
      */
     public function getGiftRecipient()
     {
-        return $this->hasOne(GiftRecipients::className(), ['ID' => 'GIFT_RECIPIENT_ID'])->inverseOf('ordersSchedules');
+        return $this->hasOne(GiftRecipients::className(), ['ID' => 'GIFT_RECIPIENT_ID'])->inverseOf('orders');
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOperator()
+    public function getOrdersOperators()
     {
-        return $this->hasOne(User::className(), ['id' => 'OPERATOR_ID'])->inverseOf('ordersSchedules');
+        return $this->hasMany(OrdersOperators::className(), ['ORDER_ID' => 'ID'])->inverseOf('orders');
     }
+
 }

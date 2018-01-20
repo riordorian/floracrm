@@ -48,11 +48,12 @@ class Prototype extends \yii\db\ActiveRecord
      *
      * @return array
      */
-    public static function getFilterValues()
+    public static function getFilterValues($arFilter = [])
     {
         $arResult = [];
         $arItems = static::getList([
-            'select' => ['NAME']
+            'select' => ['NAME'],
+            'filter' => $arFilter
         ]);
 
         if( !empty($arItems) ){

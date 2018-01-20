@@ -7,7 +7,7 @@ use app\models\ClientsClientsGroups;
 use app\models\ClientsClientsTypes;
 use app\models\ClientsGroups;
 use app\models\ClientsTypes;
-use app\models\OrdersSchedule;
+use app\models\Orders;
 use budyaga\users\models\forms\LoginForm;
 use budyaga\users\models\User;
 use Yii;
@@ -76,7 +76,7 @@ class TerminalController extends \yii\web\Controller
             $this->redirect('/terminal/login/');
         }
         
-        $arOrders = OrdersSchedule::find()->asArray()->all();
+        $arOrders = Orders::find()->asArray()->all();
 		$arOrdersSchedule = [];
 		foreach($arOrders as $arOrder){
 			$arOrdersSchedule[] = [

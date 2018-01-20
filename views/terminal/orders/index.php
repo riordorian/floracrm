@@ -50,37 +50,38 @@ $this->params['breadcrumbs'][] = $this->title;
 					<a href="/terminal/client-add/" class="btn btn-primary js-ajax-link" data-open-type="popup">+</a>
 				</span>
 			</div>
-			<div class="terminal__cart-goods js-terminal__cart-goods hidden m-b-md">
-				<h3>Товары</h3>
-			</div>
 
-			<h3>Флорист</h3>
-			<select class="js-widget chosen" multiple data-placeholder="Выберите флориста"><?
-				foreach($arOperators as $arOperator){
-					?><option value="<?=$arOperator['id']?>" <?=$arOperator['id'] == Yii::$app->user->id ? 'selected' : ''?>><?=$arOperator['username']?></option><?
-				}
-			?></select>
-			
-			<div class="js-cart-good-template m-b-xs row hidden cart-good js-cart-good">
-				<div class="col-md-2 col-sm-3 col-xs-2">
-					<img src="" class="img-responsive">
+			<form action="/terminal/orders/sale/">
+				<div class="terminal__cart-goods js-terminal__cart-goods hidden m-b-md">
+					<h3>Товары</h3>
 				</div>
-				<div class="col-md-5 col-sm-3 col-xs-7">
-					<p>#NAME#</p>
-					<p>#PRICE# <i class="fa fa-rub"></i></p>
+	
+				<h3>Флорист</h3>
+				<select class="js-widget chosen" name="OPERATORS[]" multiple data-placeholder="Выберите флориста"><?
+					foreach($arOperators as $arOperator){
+						?><option value="<?=$arOperator['id']?>" <?=$arOperator['id'] == Yii::$app->user->id ? 'selected' : ''?>><?=$arOperator['username']?></option><?
+					}
+				?></select>
+				
+				<div class="js-cart-good-template m-b-xs row hidden cart-good js-cart-good">
+					<div class="col-md-2 col-sm-3 col-xs-2">
+						<img src="" class="img-responsive">
+					</div>
+					<div class="col-md-5 col-sm-3 col-xs-7">
+						<p>#NAME#</p>
+						<p>#PRICE# <i class="fa fa-rub"></i></p>
+					</div>
+					<div class="col-md-3 col-sm-4 col-xs-2">
+						<input type="text" class="form-control" value="1">
+	
+					</div>
+					<div class="col-md-2 js-remove-good text-right">
+						<i class="fa fa-close"></i>
+					</div>
 				</div>
-				<div class="col-md-3 col-sm-4 col-xs-2">
-					<input type="text" class="form-control" value="1">
-
-				</div>
-				<div class="col-md-2 js-remove-good text-right">
-					<i class="fa fa-close"></i>
-				</div>
-			</div>
-
-
-			<div class="terminal__order-info">
-				<form action="/terminal/orders/sale/">
+	
+				<div class="terminal__order-info">
+					
 					<div class="prices col-md-12">
 						<p>
 							<span>Подытог</span>
@@ -121,8 +122,8 @@ $this->params['breadcrumbs'][] = $this->title;
 						</div>
 						<div class="clearfix"></div>
 					</div>
-				</form>
-			</div>
+				</div>
+			</form>
 		</div>
 
 		<div class="clearfix"></div>

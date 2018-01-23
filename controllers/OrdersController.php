@@ -9,6 +9,7 @@ use app\models\Events;
 use app\models\GiftRecipients;
 use app\models\MoneyAccounts;
 use app\models\Operators;
+use app\models\OrdersGoods;
 use app\models\OrdersOperators;
 use Faker\Provider\DateTime;
 use Yii;
@@ -156,10 +157,11 @@ class OrdersController extends Controller
     {
         $arReq = \Yii::$app->request->getBodyParams();
         $this->layout = 'empty';
-        
+
         return $this->render('/terminal/sale.php', [
             'arMoneyAccounts' => MoneyAccounts::getFilterValues(['USE_ON_CASHBOX' => 1]),
             'arOperators' => !empty($arReq['OPERATORS']) ? $arReq['OPERATORS'] : [],
+            'arGoods' => empty($arReq['CatalogProducts']) ? [] : $arReq['CatalogProducts'],
             'total' => empty($arReq['TOTAL']) ? 0 : $arReq['TOTAL'],
             'discount' => empty($arReq['DISCOUNT']) ? 0 : $arReq['DISCOUNT'],
             'bonus' => empty($arReq['BONUS']) ? 0 : $arReq['BONUS'],
@@ -170,6 +172,7 @@ class OrdersController extends Controller
             
             'obMoneyAccounts' => new MoneyAccounts(),
             'obOrders' => new Orders(),
+            'obOrdersGoods' => new OrdersGoods(),
             'obOrdersOperators' => new OrdersOperators(),
             'obClients' => new Clients(),
         ]);
@@ -205,9 +208,12 @@ class OrdersController extends Controller
                 ]);
 
                 $bOrderSaved = $obOrders->save(true);
-                
-                
-                
+                if( !$bOrderSaved ){
+                    $obTransaction->rollBack();
+                    return false;
+                }
+
+
                 # Saving operators
                 $bOperatorsSaved = true;
                 $obOrdersOperators = new OrdersOperators();
@@ -221,8 +227,41 @@ class OrdersController extends Controller
                             'OPERATOR_ID' => $operatorId,
                         ]);
 
+                        # TODO: Не работает валидация
                         if( !$obOrdersOperators->save(false) ){
                             $bOperatorsSaved = false;
+                            $obTransaction->rollBack();
+                            return;
+                        }
+                    }
+                }
+                
+
+                $bGoodsSaved = true;
+                $obOrdersGoods = new OrdersGoods();
+                $obGoods = new CatalogProducts();
+                $arObGoods = [];
+                if( $obOrdersGoods->load($arReq) ){
+                    $arGoods = $obOrdersGoods->getAttribute('GOOD_ID');
+                    $arTmpObGoods = $obGoods->findAll(['ID' => array_keys($arGoods)]);
+                    foreach($arTmpObGoods as $obGood){
+                        $arObGoods[$obGood->ID] = $obGood;
+                    }
+                    
+                    foreach($arGoods as $goodId => $goodAmount){
+                        $obOrdersGoods->isNewRecord = true;
+                        $obOrdersGoods->ID = NULL;
+                        $obOrdersGoods->setAttributes([
+                            'ORDER_ID' => $obOrders->ID,
+                            'GOOD_ID' => $goodId,
+                            'AMOUNT' => $goodAmount,
+                        ]);
+                        
+                        $arObGoods[$goodId]->updateCounters(['AMOUNT' => $goodAmount * (-1)]);
+
+                        # TODO: Не работает валидация
+                        if( !$obOrdersGoods->save(false) ){
+                            $bGoodsSaved = false;
                             $obTransaction->rollBack();
                             return;
                         }
@@ -232,7 +271,7 @@ class OrdersController extends Controller
                 
 
                 # Saving all info only if all operations done
-                if( $bOrderSaved && $bOperatorsSaved ){
+                if( $bOrderSaved && $bOperatorsSaved && $bGoodsSaved ){
                     $obTransaction->commit();
                 }
                 else{

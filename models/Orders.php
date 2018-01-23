@@ -7,16 +7,22 @@ use Yii;
 
 /**
  * This is the model class for table "orders_schedule".
+ * This is the model class for table "orders_goods".
  *
  * @property integer $ID
+ * @property integer $GOOD_ID
  * @property string $NAME
  * @property integer $CLIENT_ID
  * @property integer $GIFT_RECIPIENT_ID
  * @property integer $EVENT_ID
  * @property double $SUM
+ * @property double $TOTAL
+ * @property integer $DISCOUNT
  * @property string $RECEIVING_DATE_START
  * @property string $RECEIVING_DATE_END
  * @property integer $NEED_DELIVERY
+ * @property string $PAYMENT_STATUS
+ * @property string $TYPE
  * @property string $STATUS
  * @property double $PREPAYMENT
  * @property string $COMMENT
@@ -24,7 +30,8 @@ use Yii;
  * @property Clients $cLIENT
  * @property Events $eVENT
  * @property GiftRecipients $gIFTRECIPIENT
- * * @property OrdersOperators[] $ordersOperators
+ * @property OrdersGoods[] $ordersGoods
+ * @property OrdersOperators[] $ordersOperators
  */
 class Orders extends \yii\db\ActiveRecord
 {
@@ -98,7 +105,7 @@ class Orders extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['NAME', ], 'required'],
+            [['NAME'], 'required'],
             [['CLIENT_ID', 'GIFT_RECIPIENT_ID', 'EVENT_ID', 'NEED_DELIVERY'], 'integer'],
             [['TOTAL', 'PREPAYMENT', 'DISCOUNT'], 'number'],
             [['RECEIVING_DATE_START', 'RECEIVING_DATE_END', 'CLOSING_DATE'], 'safe'],
@@ -107,6 +114,7 @@ class Orders extends \yii\db\ActiveRecord
             [['STATUS'], 'string', 'max' => 3],
             [['PAYMENT_STATUS'], 'string', 'max' => 3],
             [['TYPE'], 'string', 'max' => 3],
+            # TODO: Не работает сохранение заказа, если не выбран клиент
             [['CLIENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => Clients::className(), 'targetAttribute' => ['CLIENT_ID' => 'ID']],
             [['EVENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => Events::className(), 'targetAttribute' => ['EVENT_ID' => 'ID']],
             [['GIFT_RECIPIENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => GiftRecipients::className(), 'targetAttribute' => ['GIFT_RECIPIENT_ID' => 'ID']],
@@ -284,9 +292,22 @@ class Orders extends \yii\db\ActiveRecord
         return $this->hasOne(GiftRecipients::className(), ['ID' => 'GIFT_RECIPIENT_ID'])->inverseOf('orders');
     }
 
+
+    /**
+     * @return $this
+     */
     public function getOrdersOperators()
     {
         return $this->hasMany(OrdersOperators::className(), ['ORDER_ID' => 'ID'])->inverseOf('orders');
+    }
+
+
+    /**
+     * @return $this
+     */
+    public function getOrdersGoods()
+    {
+        return $this->hasMany(OrdersGoods::className(), ['ORDER_ID' => 'ID'])->inverseOf('orders');
     }
 
 }

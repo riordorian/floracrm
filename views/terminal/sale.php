@@ -36,6 +36,12 @@
 				echo $form->field($obOrdersOperators, 'OPERATOR_ID[]', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $operatorId])->label(false);
 			}
 		}
+
+		if( !empty($arGoods) ){
+			foreach($arGoods as $goodId => $goodAmount){
+				echo $form->field($obOrdersGoods, 'GOOD_ID[' . $goodId . ']', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $goodAmount])->label(false);
+			}
+		}
 	?>
 
 

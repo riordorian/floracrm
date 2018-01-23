@@ -75,8 +75,21 @@ class CatalogProducts extends Prototype
         return $this->hasOne(CatalogSections::className(), ['ID' => 'CATALOG_SECTION_ID'])->inverseOf('catalogProducts');
     }
 
+
+    /**
+     * @return $this
+     */
     public function getGoodsSupplies()
     {
         return $this->hasMany(GoodsSupplies::className(), ['GOOD_ID' => 'ID'])->inverseOf('good');
+    }
+
+
+    /**
+     * @return $this
+     */
+    public function getOrdersGoods()
+    {
+        return $this->hasMany(OrdersGoods::className(), ['GOOD_ID' => 'ID'])->inverseOf('good');
     }
 }

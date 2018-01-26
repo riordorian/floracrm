@@ -8,6 +8,7 @@ use app\models\Clients;
 use app\models\Events;
 use app\models\GiftRecipients;
 use app\models\MoneyAccounts;
+use app\models\MoneyMovements;
 use app\models\Operators;
 use app\models\OrdersGoods;
 use app\models\OrdersOperators;
@@ -84,6 +85,7 @@ class OrdersController extends Controller
         if( !empty($name) ){
             $rsGoods->andWhere(['like', 'NAME', $name]);
         }
+        $rsGoods->andWhere(['>', 'AMOUNT', 0]);
 
         $arGoods = $rsGoods->asArray()->all();
         
@@ -206,7 +208,7 @@ class OrdersController extends Controller
                     'PAYMENT_STATUS' => !empty($arReq['CLOSE_WITHOUT_PAYMENT']) ? 'W' : 'F',
                     'STATUS' => 'F',
                 ]);
-
+                
                 $bOrderSaved = $obOrders->save(true);
                 if( !$bOrderSaved ){
                     $obTransaction->rollBack();
@@ -235,8 +237,9 @@ class OrdersController extends Controller
                         }
                     }
                 }
-                
 
+
+                # Saving order goods
                 $bGoodsSaved = true;
                 $obOrdersGoods = new OrdersGoods();
                 $obGoods = new CatalogProducts();
@@ -267,11 +270,38 @@ class OrdersController extends Controller
                         }
                     }
                 }
+
+
                 
-                
+                $bTransactionDone = true;
+                $obMoneyMovements = new MoneyMovements();
+                $obMoneyAccounts = new MoneyAccounts();
+                if( $obMoneyAccounts->load($arReq) ){
+                    $arTransactions = $obMoneyAccounts->getAttribute('BALANCE');
+                    foreach($arTransactions as $accId => $sum){
+                        $obMoneyMovements->isNewRecord = true;
+                        $obMoneyMovements->ID = NULL;
+                        $obMoneyMovements->setAttributes([
+                            'TYPE' => 'INCOME',
+                            'AMOUNT' => $sum,
+                            'MONEY_ACCOUNT' => $accId,
+                            'ORDER_ID' => $obOrders->ID,
+                            'USER_ID' => Yii::$app->user->id,
+                            'CASHBOX_ID' => 1,
+                            'DATE' => date('Y-m-d H:i:s'),
+                            'NAME' => 'Операция по заказу ' . $obOrders->ID,
+                        ]);
+
+                        if( !$obMoneyMovements->save(true) ){
+                            $bTransactionDone = false;
+                            $obTransaction->rollBack();
+                            return;
+                        }
+                    }
+                }
 
                 # Saving all info only if all operations done
-                if( $bOrderSaved && $bOperatorsSaved && $bGoodsSaved ){
+                if( $bOrderSaved && $bOperatorsSaved && $bGoodsSaved && $bTransactionDone ){
                     $obTransaction->commit();
                 }
                 else{

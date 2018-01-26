@@ -78,8 +78,11 @@ class Operators extends User
 
         if( empty($arParams['RETURN_TYPE']) || $arParams['RETURN_TYPE'] != 'QUERY' ){
             $query->asArray();
+            $arRes = $query->all();
         }
-        $arRes = $query->all();
+        else{
+            $arRes = $query;
+        }
 
         return $arRes;
     }

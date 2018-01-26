@@ -28,7 +28,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 ['class' => 'yii\grid\SerialColumn'],
 
                 'NAME',
-                'AMOUNT',
+                [
+                    'attribute' => 'AMOUNT',
+                    'value' => function ($dataProvider) {
+                        return number_format($dataProvider->AMOUNT, 0, '.', ' ') . ' <i class="fa fa-rub"></i>';
+                    },
+                    'format' => 'html'
+                ],
+                [
+                    'attribute' => 'TYPE',
+                    'value' => function ($dataProvider) {
+                        return $dataProvider->TYPE == 'INCOME' ? 'Доход' : 'Расход';
+                    },
+                ],
                 [
                     'attribute' => 'MONEY_ACCOUNT',
                     'value' => 'moneyAccount.NAME'

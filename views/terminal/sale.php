@@ -84,7 +84,7 @@
 		<h3 class="js-change text-lg">Сдача <span>0</span> <i class="fa fa-rub"></i></h3>
 
 		<div class="text-center m-t-lg">
-			<a href="javascript:;" class="btn btn-lg btn-primary js-save-entity">Завершить</a>
+			<a href="javascript:;" class="btn btn-lg btn-primary js-save-entity" disabled="">Завершить</a>
 		</div>
 	<? ActiveForm::end();?>
 </div><?

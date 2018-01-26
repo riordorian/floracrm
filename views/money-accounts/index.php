@@ -41,7 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $type;
                 },
             ],
-            'BALANCE',
+            [
+                'attribute' => 'BALANCE',
+                'value' => function ($dataProvider) {
+                    return number_format($dataProvider->BALANCE, 0, '.', ' ') . ' <i class="fa fa-rub"></i>';
+                },
+                'format' => 'html'
+            ],
             [
                 'attribute' => 'USE_ON_CASHBOX',
                 'value' => function ($dataProvider) {
@@ -51,7 +57,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
             [
                 'class' => 'yii\grid\ActionColumn',
-                'contentOptions' => ['class' => 'text-right column column_actions']
+                'contentOptions' => ['class' => 'text-right column column_actions'],
+                'buttons'=>[
+                    'update'=>function ($url, $model) {
+                        $customurl = Yii::$app->getUrlManager()->createUrl(['admin/money-accounts/update','id' => $model['ID']]);
+                        if( $model['TYPE'] != 'CASH' ){
+                            return \yii\helpers\Html::a( '<span class="glyphicon glyphicon-pencil"></span>', $customurl,
+                                ['title' => Yii::t('yii', 'Edit'), 'data-pjax' => '0']);
+                        }
+                    },
+                    'delete'=>function ($url, $model) {
+                        $customurl = Yii::$app->getUrlManager()->createUrl(['admin/money-accounts/delete','id' => $model['ID']]);
+                        if( $model['TYPE'] != 'CASH' ){
+                            return \yii\helpers\Html::a( '<span class="glyphicon glyphicon-trash"></span>', $customurl,
+                                ['title' => Yii::t('yii', 'Delete'), 'data-pjax' => '0']);
+                        }
+                    }
+                ],
             ],
         ],
         'tableOptions' => [

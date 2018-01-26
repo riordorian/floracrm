@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                      'BASE_PRICE',
                      'RETAIL_PRICE',
+                    
                     /* 'EXPIRATION_TIME',
                      'MIN_COUNT',*/
 

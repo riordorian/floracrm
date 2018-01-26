@@ -33,12 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'IMAGE',
                 'value' => ($model->IMAGE),
-                'format' => ['image',['height'=>'200']],
+                'format' => ['image',['max-height'=>'200']],
             ],
             'BASE_PRICE',
             'RETAIL_PRICE',
-            'EXPIRATION_TIME',
-            'MIN_COUNT',
+            'AMOUNT',
+            /*'EXPIRATION_TIME',
+            'MIN_COUNT',*/
         ],
     ]) ?>
 

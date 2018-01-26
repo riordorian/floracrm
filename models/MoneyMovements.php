@@ -81,9 +81,7 @@ class MoneyMovements extends \yii\db\ActiveRecord
 
 
     /**
-     * After save element event handler
-     * @param bool  $insert
-     * @param array $changedAttributes
+     * @return bool
      */
     public function beforeValidate()
     {
@@ -116,7 +114,7 @@ class MoneyMovements extends \yii\db\ActiveRecord
     }
 
 
-    /**
+/**
      * Making
      * Transactions
      * Formatting dates

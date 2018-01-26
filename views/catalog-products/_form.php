@@ -39,15 +39,22 @@ use yii\widgets\ActiveForm;
                         'class' => 'js-widget chosen'
                     ]
                 );?>
-            <?= $form->field($model, 'UPLOAD', ['options' => ['class' => $fieldClass]])->fileInput(['class' => 'js-widget uploadpicker']) ?>
+            <?= $form->field($model, 'UPLOAD',
+                [
+                    'options' => [
+                        'class' => $fieldClass,
+                    ],
+                    'template' => '<div class="input-group m-b">{input}<span class="input-group-addon"><i class="fa fa-file-image-o"></i></span></div>'
+                ]
+            )->fileInput(['class' => 'js-widget uploadpicker']) ?>
 
             <?= $form->field($model, 'BASE_PRICE', ['options' => ['class' => $fieldClass]])->textInput(['type' => 'number']) ?>
 
             <?= $form->field($model, 'RETAIL_PRICE', ['options' => ['class' => $fieldClass]])->textInput(['type' => 'number']) ?>
 
-            <?= $form->field($model, 'EXPIRATION_TIME', ['options' => ['class' => $fieldClass]])->textInput(['type' => 'number']) ?>
+            <?/*= $form->field($model, 'EXPIRATION_TIME', ['options' => ['class' => $fieldClass]])->textInput(['type' => 'number']) */?><!--
 
-            <?= $form->field($model, 'MIN_COUNT', ['options' => ['class' => $fieldClass]])->textInput(['type' => 'number']) ?>
+            --><?/*= $form->field($model, 'MIN_COUNT', ['options' => ['class' => $fieldClass]])->textInput(['type' => 'number']) */?>
 
             <div class="form-group <?=$fieldClass?>">
                 <?= Html::submitButton('<i class="fa fa-check"></i>&nbsp;Сохранить', ['class' => 'btn btn-primary js-btn_cloning']) ?>

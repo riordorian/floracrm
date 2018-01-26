@@ -28,11 +28,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'ID',
             'NAME',
-            'TYPE',
-            'AMOUNT',
-            'MONEY_ACCOUNT',
+            [
+                'attribute' => 'TYPE',
+                'value' => function ($dataProvider) {
+                    return $dataProvider->TYPE == 'INCOME' ? 'Доход' : 'Расход';
+                },
+            ],
+            [
+                'attribute' => 'AMOUNT',
+                'value' => function ($dataProvider) {
+                    return number_format($dataProvider->AMOUNT, 0, '.', ' ') . ' <i class="fa fa-rub"></i>';
+                },
+                'format' => 'html'
+            ],
+            'moneyAccount.NAME',
             'ORDER_ID',
-            'DATE',
+            [
+                'attribute' => 'DATE',
+                'value' => function ($dataProvider) {
+                    return date('d.m.Y H:i', strtotime($dataProvider->DATE));
+                },
+                'format' => 'html'
+            ],
             'user.username',
             'COMMENT:ntext',
         ],

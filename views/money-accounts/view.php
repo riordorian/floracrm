@@ -10,18 +10,22 @@ $this->title = $model->NAME;
 $this->params['breadcrumbs'][] = ['label' => 'Счета', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="money-accounts-view">
+<div class="money-accounts-view"><?
+    if( $model->TYPE != 'CASH' ){
+        ?><p>
+            <?= Html::a('Обновить', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
+            <?= Html::a('Удалить', ['delete', 'id' => $model->ID], [
+                'class' => 'btn btn-danger',
+                'data' => [
+                    'confirm' => 'Вы уверены, что хотите удалить счет?',
+                    'method' => 'post',
+                ],
+            ]) ?>
+        </p><?
+    }
+    ?>
 
-    <p>
-        <?= Html::a('Обновить', ['update', 'id' => $model->ID], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->ID], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Вы уверены, что хотите удалить счет?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+
 
     <?= DetailView::widget([
         'model' => $model,
@@ -46,7 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $type;
                 },
             ],
-            'BALANCE',
+            [
+                'attribute' => 'BALANCE',
+                'value' => function ($dataProvider) {
+                    return number_format($dataProvider->BALANCE, 0, '.', ' ') . ' <i class="fa fa-rub"></i>';
+                },
+                'format' => 'html'
+            ],
             [
                 'attribute' => 'USE_ON_CASHBOX',
                 'value' => function ($dataProvider) {

@@ -79,6 +79,11 @@ $this->params['breadcrumbs'][] = $this->title;
 						<i class="fa fa-close"></i>
 					</div>
 				</div>
+
+
+				<div class="text-center m-t-lg">
+					<a class="btn btn-primary js-bouquet js-sale-link hidden" data-href="/terminal/orders/bouquet/" data-open-type="popup">Сформировать букет</a>
+				</div>
 	
 				<div class="terminal__order-info">
 					
@@ -112,7 +117,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						<input type="hidden" name="CLIENT_ID" class="js-client-id-field">
 					</div>
 					<div class="clearfix"></div>
-					<div class="total js-sale-link disabled" data-open-type="popup"">
+					<div class="total js-sale-link disabled" data-href="/terminal/orders/sale/" data-open-type="popup">
 						<div class="col-md-6"><b>ОПЛАТА</b></div>
 						<div class="col-md-6 text-right">
 							<b>

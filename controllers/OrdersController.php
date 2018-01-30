@@ -24,7 +24,7 @@ use yii\filters\VerbFilter;
 /**
  * OrdersController implements the CRUD actions for Orders model.
  */
-class OrdersController extends Controller
+class OrdersController extends PrototypeController
 {
     public $viewPath = '/terminal/orders/';
 
@@ -58,6 +58,7 @@ class OrdersController extends Controller
 
         
         $arCategories = CatalogSections::find()->asArray()->all();
+        array_unshift($arCategories, ['ID' => 0, 'NAME' => 'Букеты', 'IMAGE' => '/uploads/bouquets.jpg']);
         $arOperstors = Operators::getList();
 
         return $this->render($this->viewPath . 'index', [
@@ -79,15 +80,28 @@ class OrdersController extends Controller
     {
         $this->layout = 'empty';
         $rsGoods = CatalogProducts::find();
-        if( !empty($categoryId) ){
-            $rsGoods->andWhere(['CATALOG_SECTION_ID' => $categoryId]);
-        }
-        if( !empty($name) ){
-            $rsGoods->andWhere(['like', 'NAME', $name]);
-        }
         $rsGoods->andWhere(['>', 'AMOUNT', 0]);
+        
+        if( !empty($categoryId) || !empty($arGoods) ){
+            if( !empty($categoryId) ){
+                $rsGoods->andWhere(['CATALOG_SECTION_ID' => $categoryId]);
+            }
+            elseif( !empty($name) ){
+                $rsGoods->andWhere(['like', 'NAME', $name]);
+            }
 
-        $arGoods = $rsGoods->asArray()->all();
+            $arGoods = $rsGoods->select(['ID', 'NAME', 'AMOUNT', 'IMAGE', 'RETAIL_PRICE', 'CATALOG_SECTION_ID'])->with('catalogSection')->asArray()->all();
+        }
+        elseif( $categoryId == 0 && empty($name) ){
+            $arGoods = Orders::getBouquets();
+        }
+        
+        foreach($arGoods as &$arGood){
+            if( empty($arGood['IMAGE']) ){
+                $arGood['IMAGE'] = '/uploads/catalog_sections/dummy.jpg';
+            }
+        }
+        unset($arGood);
         
         return $this->render($this->viewPath . 'goods-list', [
             'arGoods' => $arGoods
@@ -104,6 +118,7 @@ class OrdersController extends Controller
     {
         $this->layout = 'empty';
         $arSections = CatalogSections::find()->asArray()->all();
+        array_unshift($arSections, ['ID' => 0, 'NAME' => 'Букеты', 'IMAGE' => '/uploads/bouquets.jpg']);
 
         return $this->render($this->viewPath . 'sections-list', [
             'arSections' => $arSections
@@ -181,6 +196,31 @@ class OrdersController extends Controller
     }
 
 
+    public function actionBouquet()
+    {
+        $arReq = \Yii::$app->request->getBodyParams();
+        $this->layout = 'empty';
+
+        return $this->render('/terminal/bouquet.php', [
+            'arOperators' => !empty($arReq['OPERATORS']) ? $arReq['OPERATORS'] : [],
+            'arGoods' => empty($arReq['CatalogProducts']) ? [] : $arReq['CatalogProducts'],
+            'total' => empty($arReq['TOTAL']) ? 0 : $arReq['TOTAL'],
+            'orderId' => empty($arReq['ORDER_ID']) ? '' : $arReq['ORDER_ID'],
+            'sum' => empty($arReq['SUM']) ? 0 : $arReq['SUM'],
+
+            'obOrders' => new Orders(),
+            'obOrdersGoods' => new OrdersGoods(),
+            'obOrdersOperators' => new OrdersOperators(),
+        ]);
+    }
+
+
+    /**
+     * Saving order
+     * 
+     * @return string
+     * @throws \yii\db\Exception
+     */
     public function actionSave()
     {
         $this->layout = 'empty';
@@ -190,26 +230,34 @@ class OrdersController extends Controller
         if( empty($this->obTransaction) ){
             $obTransaction = $obConnection->beginTransaction();
         }
+        
 
         try{
             $obOrders = new Orders();
             if( $obOrders->load($arReq) ){
-                
                 # Saving order
                 if( !empty($obOrders->ID) ){
                     $obOrders = $this->findModel($obOrders->ID);
                 }
                 else{
-                    $obOrders->setAttribute('NAME', 'Заказ ' . date('d.m.Y H:i:s'));
+                    $obOrders->setAttribute('NAME', empty($arReq['NAME']) ? 'Заказ ' . date('d.m.Y H:i:s') : $arReq['NAME']);
                     $obOrders->setAttribute('TYPE', 'S');
                 }
+                # Statuses for bouquets
+                if( $obOrders->TYPE == 'B' ){
+                    $obOrders->setAttributes([
+                        'PAYMENT_STATUS' => 'N',
+                        'STATUS' => 'C',
+                    ]);
+                }
+                else{
+                    $obOrders->setAttributes([
+                        'PAYMENT_STATUS' => !empty($arReq['CLOSE_WITHOUT_PAYMENT']) ? 'W' : 'F',
+                        'STATUS' => 'F',
+                    ]);    
+                }
                 
-                $obOrders->setAttributes([
-                    'PAYMENT_STATUS' => !empty($arReq['CLOSE_WITHOUT_PAYMENT']) ? 'W' : 'F',
-                    'STATUS' => 'F',
-                ]);
-                
-                $bOrderSaved = $obOrders->save(true);
+                $bOrderSaved = $this->saveModel($obOrders);
                 if( !$bOrderSaved ){
                     $obTransaction->rollBack();
                     return false;
@@ -236,6 +284,10 @@ class OrdersController extends Controller
                             return;
                         }
                     }
+                }
+                else{
+                    $obTransaction->rollBack();
+                    return;
                 }
 
 
@@ -270,13 +322,17 @@ class OrdersController extends Controller
                         }
                     }
                 }
+                else{
+                    $obTransaction->rollBack();
+                    return;
+                }
 
 
                 
                 $bTransactionDone = true;
                 $obMoneyMovements = new MoneyMovements();
                 $obMoneyAccounts = new MoneyAccounts();
-                if( $obMoneyAccounts->load($arReq) ){
+                if( $obMoneyAccounts->load($arReq) && $obOrders['TYPE'] != 'B' ){
                     $arTransactions = $obMoneyAccounts->getAttribute('BALANCE');
                     foreach($arTransactions as $accId => $sum){
                         $obMoneyMovements->isNewRecord = true;
@@ -299,10 +355,15 @@ class OrdersController extends Controller
                         }
                     }
                 }
+                elseif( $obOrders['TYPE'] != 'B' ){
+                    $obTransaction->rollBack();
+                    return;
+                }
 
                 # Saving all info only if all operations done
                 if( $bOrderSaved && $bOperatorsSaved && $bGoodsSaved && $bTransactionDone ){
                     $obTransaction->commit();
+                    return $this->render('/terminal/orders/_success' . (($obOrders->TYPE == 'B') ? '_bouquet' : '' . '.php'));
                 }
                 else{
                     $obTransaction->rollBack();

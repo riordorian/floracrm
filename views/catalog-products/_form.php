@@ -44,9 +44,9 @@ use yii\widgets\ActiveForm;
                     'options' => [
                         'class' => $fieldClass,
                     ],
-                    'template' => '<div class="input-group m-b">{input}<span class="input-group-addon"><i class="fa fa-file-image-o"></i></span></div>'
+                    'template' => '{label}<div class="input-group m-b">{input}<span class="input-group-addon"><i class="fa fa-file-image-o"></i></span></div>'
                 ]
-            )->fileInput(['class' => 'js-widget uploadpicker']) ?>
+            )->fileInput(['class' => 'js-widget uploadpicker', 'placeholder' => $model->getAttributeLabel('UPLOAD')])->label($model->getAttributeLabel('UPLOAD')) ?>
 
             <?= $form->field($model, 'BASE_PRICE', ['options' => ['class' => $fieldClass]])->textInput(['type' => 'number']) ?>
 

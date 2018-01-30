@@ -51,6 +51,7 @@ class Orders extends \yii\db\ActiveRecord
     public $OPERATOR;
     public $SUM_FORMATTED;
     public $PREPAYMENT_FORMATTED;
+    public $UPLOAD;
 
     /**
      * Orders types
@@ -114,6 +115,7 @@ class Orders extends \yii\db\ActiveRecord
             [['STATUS'], 'string', 'max' => 3],
             [['PAYMENT_STATUS'], 'string', 'max' => 3],
             [['TYPE'], 'string', 'max' => 3],
+            [['IMAGE'], 'string', 'max' => 150],
             # TODO: Не работает сохранение заказа, если не выбран клиент
             [['CLIENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => Clients::className(), 'targetAttribute' => ['CLIENT_ID' => 'ID']],
             [['EVENT_ID'], 'exist', 'skipOnError' => true, 'targetClass' => Events::className(), 'targetAttribute' => ['EVENT_ID' => 'ID']],
@@ -148,6 +150,7 @@ class Orders extends \yii\db\ActiveRecord
             'PREPAYMENT' => 'Предоплата',
             'PREPAYMENT_FORMATTED' => 'Предоплата',
             'COMMENT' => 'Комментарий',
+            'IMAGE' => 'Изображение',
         ];
     }
 
@@ -266,6 +269,35 @@ class Orders extends \yii\db\ActiveRecord
             $this->RECEIVING_TIME_END = date('H:i', strtotime($arAttrs['RECEIVING_DATE_END']));
         }
     }
+
+
+    /**
+     * Getting bouquets list
+     * 
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getBouquets()
+    {
+        $arBouquets = static::find()
+            ->where(['TYPE' => 'B', 'STATUS' => 'C'])
+            ->select([
+                'ID',
+                'NAME',
+                'IMAGE',
+                'RETAIL_PRICE' => 'TOTAL',
+            ])
+            ->asArray()
+            ->all();
+
+        array_walk($arBouquets, function(&$arElem){
+            $arElem['AMOUNT'] = 1;
+            $arElem['catalogSection']['NAME'] = 'Букеты';
+        });
+        unset($arElement);
+        
+        return $arBouquets;
+    }
+    
 
 
     /**

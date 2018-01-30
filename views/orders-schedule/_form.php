@@ -40,7 +40,7 @@ $moneyFieldTemplate = "<div class='form-group'>
 
     <?= $form->field($model, 'EVENT_ID')->dropDownList($arEvents, ['prompt' => 'Выберите событие', 'class' => 'js-widget chosen']); ?>
 
-    <?= $form->field($model, 'SUM', ['template' => $moneyFieldTemplate])->textInput(['type' => 'number']) ?>
+    <?= $form->field($model, 'TOTAL', ['template' => $moneyFieldTemplate])->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'PREPAYMENT', ['template' => $moneyFieldTemplate])->textInput(['type' => 'number']) ?>
 

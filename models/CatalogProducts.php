@@ -72,7 +72,7 @@ class CatalogProducts extends Prototype
      */
     public function getCatalogSection()
     {
-        return $this->hasOne(CatalogSections::className(), ['ID' => 'CATALOG_SECTION_ID'])->inverseOf('catalogProducts');
+        return $this->hasOne(CatalogSections::className(), ['ID' => 'CATALOG_SECTION_ID'])->inverseOf('good');
     }
 
 

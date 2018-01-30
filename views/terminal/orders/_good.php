@@ -9,7 +9,7 @@
 										<span class="product-price">
 											<?=$arGood['RETAIL_PRICE']?> <i class="fa fa-rub"></i>
 										</span>
-				<small class="text-muted">Category</small>
+				<small class="text-muted"><?=$arGood['catalogSection']['NAME']?></small>
 				<a href="#" class="product-name"> <?=$arGood['NAME']?></a>
 
 

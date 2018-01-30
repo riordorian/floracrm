@@ -55,9 +55,9 @@ class CatalogSections extends Prototype
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCatalogProducts()
+    public function getGood()
     {
-        return $this->hasMany(CatalogProducts::className(), ['CATALOG_SECTION_ID' => 'ID'])->inverseOf('cATALOGSECTION');
+        return $this->hasMany(CatalogProducts::className(), ['CATALOG_SECTION_ID' => 'ID'])->inverseOf('catalogSection');
     }
 
 

@@ -1,3 +1,4 @@
+<!--TODO: Сделать выравнивание блоков по высоте, если отличаются названия-->
 <?
 foreach($arGoods as $arGood){
 	echo $this->render('_good', [

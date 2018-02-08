@@ -76,9 +76,24 @@ class TerminalController extends \yii\web\Controller
             $this->redirect('/terminal/login/');
         }
         
-        $arOrders = Orders::find()->asArray()->all();
+        $arOrders = Orders::find()
+            ->andWhere(['!=', 'TYPE', 'B'])
+            ->andWhere(['!=', 'STATUS', 'F'])
+            ->asArray()
+            ->all();
 		$arOrdersSchedule = [];
 		foreach($arOrders as $arOrder){
+            $class = '';
+            
+            if( $arOrder['STATUS'] == 'N' ){
+                if( time() >= strtotime(date('d.m.Y', strtotime($arOrder['RECEIVING_DATE_START'])) . ' 00:00:00') ){
+                    $class = 'bg-danger';
+                }
+                else{
+                    $class = 'bg-warning';
+                }
+            }
+
 			$arOrdersSchedule[] = [
 				'id' => $arOrder['ID'],
 				'title' => $arOrder['NAME'],
@@ -87,6 +102,8 @@ class TerminalController extends \yii\web\Controller
 				'durationEditable' => false,
 				'resourceEditable' => true,
 				'description' => $arOrder['COMMENT'],
+				'className' => $class,
+				'status' => $arOrder['STATUS'],
 			];
 		}
 

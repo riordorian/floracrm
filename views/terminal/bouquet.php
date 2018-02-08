@@ -17,9 +17,11 @@
 	?>
 
 	<?= $form->field($obOrders, 'ID', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $orderId])->label(false); ?>
-	<?= $form->field($obOrders, 'TYPE', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => 'B'])->label(false); ?>
+	<?= $form->field($obOrders, 'TYPE', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => empty($arReq['ORDER_ID']) ? 'B' : 'P'])->label(false); ?>
 	<?= $form->field($obOrders, 'STATUS', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => 'C'])->label(false); ?>
 	<?= $form->field($obOrders, 'TOTAL', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $total])->label(false); ?>
+	<?= $form->field($obOrders, 'DISCOUNT', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $discount])->label(false); ?>
+	<?= $form->field($obOrders, 'STEP', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $step])->label(false); ?>
 	<?
 		if( !empty($arOperators) ){
 			foreach($arOperators as $operatorId){
@@ -37,7 +39,7 @@
 	<h2 class="m-b-md">Создание букета</h2>
 
 	<?= $form->field($obOrders, 'NAME', ['options' => []])
-		->textInput(['class' => 'form-control', 'placeholder' => 'Название букета'])
+		->textInput(['class' => 'form-control', 'placeholder' => 'Название букета', 'value' => empty($arOrder['NAME']) ? '' : $arOrder['NAME']])
 		->label('Название букета'); ?>
 
 
@@ -50,7 +52,7 @@
 
 
 		<div class="text-center m-t-lg">
-			<a href="javascript:;" class="btn btn-lg btn-primary js-save-entity" data-reload="true">Сформировать</a>
+			<a href="javascript:;" class="btn btn-lg btn-primary js-save-entity" >Сформировать</a>
 		</div>
 	<? ActiveForm::end();?>
 </div><?

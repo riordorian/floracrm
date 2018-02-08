@@ -52,6 +52,10 @@ class Orders extends \yii\db\ActiveRecord
     public $SUM_FORMATTED;
     public $PREPAYMENT_FORMATTED;
     public $UPLOAD;
+    /**
+     * @var C - collecting, F - FINISHING
+     */
+    public $STEP;
 
     /**
      * Orders types
@@ -109,8 +113,8 @@ class Orders extends \yii\db\ActiveRecord
             [['NAME'], 'required'],
             [['CLIENT_ID', 'GIFT_RECIPIENT_ID', 'EVENT_ID', 'NEED_DELIVERY'], 'integer'],
             [['TOTAL', 'PREPAYMENT', 'DISCOUNT'], 'number'],
-            [['RECEIVING_DATE_START', 'RECEIVING_DATE_END', 'CLOSING_DATE'], 'safe'],
-            [['COMMENT', 'RECEIVING_TIME_START', 'RECEIVING_TIME_END'], 'string'],
+            [['RECEIVING_DATE_START', 'RECEIVING_DATE_END', 'CLOSING_DATE', 'SELLING_TIME'], 'safe'],
+            [['COMMENT', 'RECEIVING_TIME_START', 'RECEIVING_TIME_END', 'STEP'], 'string'],
             [['NAME'], 'string', 'max' => 50],
             [['STATUS'], 'string', 'max' => 3],
             [['PAYMENT_STATUS'], 'string', 'max' => 3],
@@ -143,6 +147,7 @@ class Orders extends \yii\db\ActiveRecord
             'RECEIVING_TIME_START' => 'Подготовить с',
             'RECEIVING_DATE_END' => 'Подготовить до',
             'RECEIVING_TIME_END' => 'Подготовить до',
+            'SELLING_TIME' => 'Дата и время продажи',
             'NEED_DELIVERY' => 'Требуется доставка',
             'OPERATOR_ID' => 'Флорист',
             'OPERATOR' => 'Флорист',
@@ -203,6 +208,8 @@ class Orders extends \yii\db\ActiveRecord
         if( ($insert || $arOldAttrs['GIFT_RECIPIENT_ID'] != $arAttrs['GIFT_RECIPIENT_ID']
                 || $arOldAttrs['EVENT_ID'] != $arAttrs['EVENT_ID'])
             && !empty($arAttrs['EVENT_ID']) && !empty($arAttrs['GIFT_RECIPIENT_ID']) ){
+            
+
             $arClientEvent = ClientsEvents::find()->where([
                 'CLIENT_ID' => $arAttrs['CLIENT_ID'],
                 'EVENT_ID' => $arAttrs['EVENT_ID'],
@@ -291,6 +298,7 @@ class Orders extends \yii\db\ActiveRecord
 
         array_walk($arBouquets, function(&$arElem){
             $arElem['AMOUNT'] = 1;
+            $arElem['TYPE'] = 'BOUQUET';
             $arElem['catalogSection']['NAME'] = 'Букеты';
         });
         unset($arElement);

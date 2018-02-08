@@ -16,6 +16,7 @@ use Faker\Provider\DateTime;
 use Yii;
 use app\models\Orders;
 use app\models\OrdersSearch;
+use yii\data\ActiveDataProvider;
 use yii\imagine\Image;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -59,11 +60,12 @@ class OrdersController extends PrototypeController
         
         $arCategories = CatalogSections::find()->asArray()->all();
         array_unshift($arCategories, ['ID' => 0, 'NAME' => 'Букеты', 'IMAGE' => '/uploads/bouquets.jpg']);
-        $arOperstors = Operators::getList();
+//        $arOperstors = Operators::getList([]);
+        $arOperator = Operators::find()->where(['id' => Yii::$app->user->id])->asArray()->one();
 
         return $this->render($this->viewPath . 'index', [
             'arCategories' => $arCategories,
-            'arOperators' => $arOperstors
+            'arOperator' => $arOperator
         ]);
     }
 
@@ -79,6 +81,7 @@ class OrdersController extends PrototypeController
     public function actionGoodsList($categoryId = 0, $name = '')
     {
         $this->layout = 'empty';
+        $arGoods = [];
         $rsGoods = CatalogProducts::find();
         $rsGoods->andWhere(['>', 'AMOUNT', 0]);
         
@@ -99,6 +102,9 @@ class OrdersController extends PrototypeController
         foreach($arGoods as &$arGood){
             if( empty($arGood['IMAGE']) ){
                 $arGood['IMAGE'] = '/uploads/catalog_sections/dummy.jpg';
+            }
+            if( empty($arGood['TYPE']) ){
+                $arGood['TYPE'] = 'FLOWER';
             }
         }
         unset($arGood);
@@ -196,21 +202,58 @@ class OrdersController extends PrototypeController
     }
 
 
+    /**
+     * Making bouquet
+     * @return string
+     * @throws \yii\base\InvalidConfigException
+     */
     public function actionBouquet()
     {
         $arReq = \Yii::$app->request->getBodyParams();
         $this->layout = 'empty';
+        $obOrders = new Orders();
+        $orderId = empty($arReq['ORDER_ID']) ? '' : $arReq['ORDER_ID'];
+        $arOrder = [];
+        $step = '';
+        
+        if( !empty($orderId) ){
+            $arOrder = $obOrders->find()->where(['ID' => $orderId])->asArray()->one();
+            $step = 'C';
+        }
 
         return $this->render('/terminal/bouquet.php', [
             'arOperators' => !empty($arReq['OPERATORS']) ? $arReq['OPERATORS'] : [],
             'arGoods' => empty($arReq['CatalogProducts']) ? [] : $arReq['CatalogProducts'],
             'total' => empty($arReq['TOTAL']) ? 0 : $arReq['TOTAL'],
-            'orderId' => empty($arReq['ORDER_ID']) ? '' : $arReq['ORDER_ID'],
+            'discount' => empty($arReq['SUM']) ? 0 : $arReq['SUM'] - $arReq['TOTAL'],
+            'orderId' => $orderId,
             'sum' => empty($arReq['SUM']) ? 0 : $arReq['SUM'],
-
-            'obOrders' => new Orders(),
+            'arReq' => $arReq,
+            'arOrder' => $arOrder,
+            'step' => $step,
+            
+            'obOrders' => $obOrders,
             'obOrdersGoods' => new OrdersGoods(),
             'obOrdersOperators' => new OrdersOperators(),
+        ]);
+    }
+
+
+    /**
+     * List of order goods
+     * @param $id
+     *
+     * @return string
+     */
+    public function actionGetOrderGoods($id)
+    {
+        $this->layout = 'empty';
+        $dataProvider = new ActiveDataProvider([
+            'query' => OrdersGoods::find()->where(['ORDER_ID' => $id])->with('good'),
+        ]);
+
+        return $this->render('/terminal/orders/order_goods.php', [
+            'dataProvider' => $dataProvider 
         ]);
     }
 
@@ -230,33 +273,67 @@ class OrdersController extends PrototypeController
         if( empty($this->obTransaction) ){
             $obTransaction = $obConnection->beginTransaction();
         }
-        
 
         try{
             $obOrders = new Orders();
             if( $obOrders->load($arReq) ){
+                $step = $obOrders->STEP;
+                $total = $obOrders->TOTAL;
+                $discount = $obOrders->DISCOUNT;
+
                 # Saving order
-                if( !empty($obOrders->ID) ){
-                    $obOrders = $this->findModel($obOrders->ID);
+                if( !empty($arReq['Orders']['ID']) ){
+                    $obOrders = $this->findModel($arReq['Orders']['ID']);
+                    
+
+                    if( !empty($obOrders) ){
+                        $obOrders->ID = $arReq['Orders']['ID'];
+                    }
                 }
                 else{
-                    $obOrders->setAttribute('NAME', empty($arReq['NAME']) ? 'Заказ ' . date('d.m.Y H:i:s') : $arReq['NAME']);
-                    $obOrders->setAttribute('TYPE', 'S');
-                }
-                # Statuses for bouquets
-                if( $obOrders->TYPE == 'B' ){
                     $obOrders->setAttributes([
-                        'PAYMENT_STATUS' => 'N',
-                        'STATUS' => 'C',
+                        'NAME' => empty($arReq['NAME']) ? 'Заказ ' . date('d.m.Y H:i:s') : $arReq['NAME'],
                     ]);
                 }
-                else{
-                    $obOrders->setAttributes([
-                        'PAYMENT_STATUS' => !empty($arReq['CLOSE_WITHOUT_PAYMENT']) ? 'W' : 'F',
-                        'STATUS' => 'F',
-                    ]);    
+
+                # Set attributes for pre orders
+                if( !empty($obOrders->ID) && $obOrders->TYPE == 'P' && $step == 'C' ){
+                    $obOrders->setAttributes(
+                        [
+                            'STATUS' => 'C',
+                            'TOTAL' => $total,
+                            'SUM' => $discount,
+                        ]
+                    );
                 }
-                
+                else{
+                    $obOrders->setAttributes(
+                        [
+                            'PAYMENT_STATUS' => !empty($arReq['CLOSE_WITHOUT_PAYMENT']) ? 'W' : 'F',
+                            'STATUS' => 'F',
+                            'SELLING_TIME' => date('Y-m-d H:i:s')
+                        ]
+                    );
+                }
+
+                # Set attributes for bouquets
+                if( empty($obOrders->ID) ){
+                    # Statuses for bouquets
+                    if( $obOrders->TYPE == 'B' ){
+                        $obOrders->setAttributes([
+                            'PAYMENT_STATUS' => 'N',
+                            'STATUS' => 'C',
+                            'SELLING_TIME' => ''
+                        ]);
+                    }
+
+                    if( empty($obOrders->TYPE) ){
+                        $obOrders->setAttributes([
+                            'TYPE' => 'S'
+                        ]);
+                    }
+                }
+
                 $bOrderSaved = $this->saveModel($obOrders);
                 if( !$bOrderSaved ){
                     $obTransaction->rollBack();
@@ -285,11 +362,10 @@ class OrdersController extends PrototypeController
                         }
                     }
                 }
-                else{
+                elseif( empty($obOrders->ID) ){
                     $obTransaction->rollBack();
                     return;
                 }
-
 
                 # Saving order goods
                 $bGoodsSaved = true;
@@ -322,11 +398,10 @@ class OrdersController extends PrototypeController
                         }
                     }
                 }
-                else{
+                elseif( empty($obOrders->ID) ){
                     $obTransaction->rollBack();
                     return;
                 }
-
 
                 
                 $bTransactionDone = true;
@@ -354,11 +429,14 @@ class OrdersController extends PrototypeController
                             return;
                         }
                     }
+                    
+
                 }
-                elseif( $obOrders['TYPE'] != 'B' ){
+                elseif( $obOrders['TYPE'] != 'B' && ($obOrders['TYPE'] == 'P' && $step == 'C') === false ){
                     $obTransaction->rollBack();
                     return;
                 }
+                
 
                 # Saving all info only if all operations done
                 if( $bOrderSaved && $bOperatorsSaved && $bGoodsSaved && $bTransactionDone ){

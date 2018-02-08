@@ -2,9 +2,8 @@
 
 namespace app\models;
 
-use Imagine\Image\ImageInterface;
+
 use Yii;
-use yii\imagine\Image;
 
 /**
  * This is the model class for table "catalog_sections".
@@ -66,22 +65,14 @@ class CatalogSections extends Prototype
      */
     public function afterSave($insert, $changedAttributes)
     {
-        parent::beforeSave($insert, $changedAttributes);
+        parent::afterSave($insert, $changedAttributes);
 
-        # cropping image
-        $docRoot = \Yii::getAlias('@webroot');
-        $dummyWebPath = '/uploads/catalog_sections/dummy.jpg';
-        $dummy = Image::thumbnail($docRoot . '/assets/terminal/img/dummy.jpg', 500, 360)->save($docRoot . $dummyWebPath);
-
-        if( !empty($this->IMAGE) && file_exists($docRoot . $this->IMAGE) ){
-            $image = $docRoot . $this->IMAGE;
-            $newImg = $docRoot . '/uploads/catalog_sections/SECTION_' . $this->ID . '.jpg';
-            Image::thumbnail($image, 500, 360)->save($newImg, ['quality' => 100]);
-            Image::crop($image, 500, 360)->save($newImg, ['quality' => 100]);
+        try{
+            # saving image
+            $this->saveImage();    
         }
-        elseif( empty($this->IMAGE) && file_exists($docRoot . $dummyWebPath) ){
-            $this->IMAGE = $dummyWebPath;
-            $this->save(true);
+        catch( \Exception $e ){
+            Yii::trace($e->getMessage(), 'flower');
         }
     }
 }

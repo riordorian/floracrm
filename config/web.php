@@ -111,7 +111,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '/signup' => '/user/user/signup',
-                '/login' => '/user/user/login',
+//                '/login' => '/user/user/login',
                 '/logout' => '/user/user/logout',
                 '/requestPasswordReset' => '/user/user/request-password-reset',
                 '/resetPassword' => '/user/user/reset-password',
@@ -192,6 +192,9 @@ $config = [
             'class' => 'budyaga\users\Module',
             'userPhotoUrl' => 'http://example.com/uploads/user/photo',
             'userPhotoPath' => '@frontend/web/uploads/user/photo',
+            'customViews' => [
+                'login' => '@app/views/site/login'
+            ],
         ],
     ],
     'params' => $params,

@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use app\models\Events;
 use app\models\GiftRecipients;
+use app\models\OrdersOperators;
 use Faker\Provider\DateTime;
 use Yii;
 use app\models\Orders;
@@ -55,9 +56,12 @@ class OrdersScheduleController extends Controller
     public function actionView($id)
     {
         $this->layout = 'empty.php';
+        $model = $this->findModel($id);
         
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'obOrders' => new Orders(),
+
         ]);
     }
 
@@ -70,8 +74,17 @@ class OrdersScheduleController extends Controller
     {
         $this->layout = 'empty.php';
         $model = new Orders();
+        $bHasChanges = $model->load(Yii::$app->request->post());
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        # Setting payment status
+        if( !empty($model->PREPAYMENT) ) {
+            $model->setAttribute('PAYMENT_STATUS', 'P');
+        }
+        else{
+            $model->setAttribute('PAYMENT_STATUS', 'N');
+        }
+        
+        if ($bHasChanges && $model->save()) {
             return $this->render('view', [
                 'model' => $this->findModel($model->ID)
             ]);
@@ -184,7 +197,7 @@ class OrdersScheduleController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Orders::findOne($id)) !== null) {
+        if (($model = Orders::find()->andWhere(['ID' => $id])->with('ordersOperators')->one()) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

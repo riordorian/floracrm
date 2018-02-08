@@ -65,5 +65,8 @@ class PrototypeController extends Controller
             $model->save();
             return true;
         }
+        else{
+            return false;
+        }
     }
 }

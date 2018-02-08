@@ -1,4 +1,24 @@
-2017-12-22 19:30:47 [127.0.0.1][-][-][trace][flower] SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'CLIENT_GROUP_ID' cannot be null
-The SQL being executed was: INSERT INTO `clients_clients_groups` (`CLIENT_GROUP_ID`, `CLIENT_ID`) VALUES (NULL, 93)
-    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/Clients.php:125
-    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/TerminalController.php:144
+2018-02-06 19:47:57 [127.0.0.1][12][57642cd9ecfa3e8e0664d770d35433f8][trace][flower] imagejpeg(/Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/uploads/app\models\CatalogProducts/SECTION_4.jpg): failed to open stream: No such file or directory
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CatalogProducts.php:109
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/Prototype.php:221
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CatalogProducts.php:106
+2018-02-06 19:48:10 [127.0.0.1][12][57642cd9ecfa3e8e0664d770d35433f8][trace][flower] imagejpeg(/Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/uploads/app\models\CatalogProducts/SECTION_2.jpg): failed to open stream: No such file or directory
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CatalogProducts.php:109
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/PrototypeController.php:65
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/CatalogProductsController.php:91
+2018-02-06 20:20:11 [127.0.0.1][12][57642cd9ecfa3e8e0664d770d35433f8][trace][flower] imagejpeg(/Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/uploads/CatalogProducts/SECTION_5.jpg): failed to open stream: No such file or directory
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CatalogProducts.php:109
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/Prototype.php:222
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CatalogProducts.php:106
+2018-02-06 20:20:42 [127.0.0.1][12][57642cd9ecfa3e8e0664d770d35433f8][trace][flower] imagejpeg(/Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/uploads/CatalogProducts/SECTION_5.jpg): failed to open stream: No such file or directory
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CatalogProducts.php:109
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/PrototypeController.php:65
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/CatalogProductsController.php:90
+2018-02-07 17:31:57 [127.0.0.1][-][-][trace][flower] imagejpeg(/Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/uploads/CatalogProducts/SECTION_1.jpg): failed to open stream: No such file or directory
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CATALOGPRODUCTS.php:109
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/GoodsSupplies.php:110
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/GoodSupplyController.php:135
+2018-02-07 17:31:57 [127.0.0.1][-][-][trace][flower] imagejpeg(/Applications/MAMP_HOSTS/htdocs/flowercrm.local/web/uploads/CatalogProducts/SECTION_2.jpg): failed to open stream: No such file or directory
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/CATALOGPRODUCTS.php:109
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/models/GoodsSupplies.php:110
+    in /Applications/MAMP_HOSTS/htdocs/flowercrm.local/controllers/GoodSupplyController.php:135

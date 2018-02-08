@@ -178,6 +178,8 @@ class Clients extends Prototype
             ])->with(['clientsClientsGroups', 'clientsClientsGroups.clientsGroups', 'clientsClientsGroups.clientsGroups.loyaltyPrograms'])->asArray()->one();
 
             $val = $arUser['clientsClientsGroups']['clientsGroups']['PERCENT'];
+
+            $arDiscounts['USER_NAME'] = $arUser['NAME'];
             if( $arUser['clientsClientsGroups']['clientsGroups']['loyaltyPrograms']['CODE'] == 'BONUS' ){
                 $arDiscounts['BONUS'] = $val;
                 $arDiscounts['CLIENT_BONUS'] = !empty($arUser['BONUS']) ? $arUser['BONUS'] : 0;

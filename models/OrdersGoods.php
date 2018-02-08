@@ -46,6 +46,7 @@ class OrdersGoods extends Prototype
             'ID' => 'ID',
             'ORDER_ID' => 'ID заказа',
             'GOOD_ID' => 'ID товара',
+            'AMOUNT' => 'Количество',
         ];
     }
 

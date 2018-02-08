@@ -62,8 +62,8 @@ class OrdersOperators extends Prototype
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getOrder()
+    public function getOrders()
     {
-        return $this->hasOne(Orders::className(), ['ID' => 'ORDER_ID'])->inverseOf('ordersOperators');
+        return $this->hasMany(Orders::className(), ['ID' => 'ORDER_ID'])->inverseOf('ordersOperators');
     }
 }

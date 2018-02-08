@@ -1,6 +1,7 @@
 <? use yii\bootstrap\ActiveForm;
 
 ?><div class="col-md-6 col-md-offset-3 col-sm-12 col-xs-12 white-bg p-sm form-horizontal js-sale-form-wrap" data-sum="<?=$total?>"><?
+
 	?>
 	<? 	$form = ActiveForm::begin(
 			[
@@ -30,6 +31,7 @@
 	<?= $form->field($obOrders, 'ID', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $orderId])->label(false); ?>
 	<?= $form->field($obOrders, 'TOTAL', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $total])->label(false); ?>
 	<?= $form->field($obOrders, 'DISCOUNT', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => $sum - $total])->label(false); ?>
+	<?= $form->field($obOrders, 'STEP', ['template' => '{input}', 'inputTemplate' => '{input}', 'options' => ['tag' => false]])->hiddenInput(['value' => 'F'])->label(false); ?>
 	<?
 		if( !empty($arOperators) ){
 			foreach($arOperators as $operatorId){

@@ -92,4 +92,21 @@ class CatalogProducts extends Prototype
     {
         return $this->hasMany(OrdersGoods::className(), ['GOOD_ID' => 'ID'])->inverseOf('good');
     }
+
+
+    /**
+     * @param bool $insert
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+
+        try{
+            # saving image
+            $this->saveImage();
+        }
+        catch( \Exception $e ){
+            Yii::trace($e->getMessage(), 'flower');
+        }
+    }
 }

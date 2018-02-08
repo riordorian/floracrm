@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use yii\base\Exception;
+use Imagine\Image\ImageInterface;
+use yii\imagine\Image;
 
 class Prototype extends \yii\db\ActiveRecord
 {
@@ -199,5 +201,25 @@ class Prototype extends \yii\db\ActiveRecord
             'PROP_NAME' => $propName,
             'DATE_PARTS' => array_merge($arParts, ['MONTH', 'DAY'])
         ];
+    }
+    
+    protected function saveImage()
+    {
+        # cropping image
+        $docRoot = \Yii::getAlias('@webroot');
+        $dummyWebPath = '/uploads/dummy.jpg';
+        $dummy = Image::thumbnail($docRoot . '/assets/terminal/img/dummy.jpg', 500, 360)->save($docRoot . $dummyWebPath);
+        $className = (new \ReflectionClass($this))->getShortName();
+
+        if( !empty($this->IMAGE) && file_exists($docRoot . $this->IMAGE) ){
+            $image = $docRoot . $this->IMAGE;
+            $newImg = $docRoot . '/uploads/' . $className . '/SECTION_' . $this->ID . '.jpg';
+            Image::thumbnail($image, 500, 360)->save($newImg, ['quality' => 100]);
+            Image::crop($image, 500, 360)->save($newImg, ['quality' => 100]);
+        }
+        elseif( empty($this->IMAGE) && file_exists($docRoot . $dummyWebPath) ){
+            $this->IMAGE = $dummyWebPath;
+            $this->save(true);
+        }
     }
 }

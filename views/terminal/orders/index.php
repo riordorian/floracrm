@@ -3,6 +3,7 @@ use yii\widgets\Breadcrumbs;
 
 $this->title = 'Все товары';
 $this->params['breadcrumbs'][] = $this->title;
+$arReq = Yii::$app->request->queryParams;
 
 ?><div class="terminal__orders-wrap container-fluid">
 	<div class="row">
@@ -43,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			</div>
 		</div>
 
-		<div class="terminal__cart col-md-4 col-sm-4 col-xs-12 js-cart">
+		<div class="terminal__cart col-md-4 col-sm-4 col-xs-12 js-cart" id="terminal-cart">
 			<div class="input-group m-b-md">
 				<input type="text" name="CLIENT" class="js-autocomplete-user form-control" placeholder="9998887755 или ФИО">
 				<span class="input-group-btn">
@@ -56,12 +57,16 @@ $this->params['breadcrumbs'][] = $this->title;
 					<h3>Товары</h3>
 				</div>
 	
+
+				<input type="hidden" name="OPERATORS[]" value="<?=Yii::$app->user->id?>">
+				<input type="hidden" name="OPERATOR_PERCENT" class="js-operator-percent" value="<?=$arOperator['pay']?>" >
+				<!--
 				<h3>Флорист</h3>
-				<select class="js-widget chosen" name="OPERATORS[]" multiple data-placeholder="Выберите флориста"><?
+				<select class="js-widget chosen" name="OPERATORS[]" multiple data-placeholder="Выберите флориста"><?/*
 					foreach($arOperators as $arOperator){
-						?><option value="<?=$arOperator['id']?>" <?=$arOperator['id'] == Yii::$app->user->id ? 'selected' : ''?>><?=$arOperator['username']?></option><?
+						*/?><option value="<?/*=$arOperator['id']*/?>" <?/*=$arOperator['id'] == Yii::$app->user->id ? 'selected' : ''*/?>><?/*=$arOperator['username']*/?></option><?/*
 					}
-				?></select>
+				*/?></select>-->
 				
 				<div class="js-cart-good-template m-b-xs row hidden cart-good js-cart-good">
 					<div class="col-md-2 col-sm-3 col-xs-2">
@@ -81,7 +86,35 @@ $this->params['breadcrumbs'][] = $this->title;
 				</div>
 
 
-				<div class="text-center m-t-lg">
+				<div class="js-cart-bouquet-template m-b-xs row hidden cart-good js-cart-good js-cart-bouquet">
+					<div class="col-md-2 col-sm-3 col-xs-2">
+						<img src="" class="img-responsive">
+					</div>
+					<div class="col-md-5 col-sm-3 col-xs-7">
+						<p>
+							#NAME#
+							 (<a class="link js-ajax-link" data-open-type="popup" href="/terminal/orders/get-order-goods/?id=#ORDER_ID#">Информация</a>)
+						</p>
+						<p>#PRICE# <i class="fa fa-rub"></i></p>
+					</div>
+					<div class="col-md-3 col-sm-4 col-xs-2">
+						<input type="text" class="form-control" value="1" disabled>
+					</div>
+					<div class="col-md-2 js-remove-good text-right">
+						<i class="fa fa-close"></i>
+					</div>
+				</div><?
+
+				if( !empty($arReq['COMMENT']) ){
+				    ?><label for="#order-comment">Комментарий к заказу</label>
+					<textarea name="ORDERS[COMMENT]" id="#order-comment" class="form-control"><?=$arReq['COMMENT']?></textarea><?
+				}
+
+				if( !empty($arReq['ORDER_ID']) ){
+				    ?><input type="hidden" name="ORDER_ID" value="<?=$arReq['ORDER_ID']?>"><?
+				}
+
+				?><div class="text-center m-t-lg">
 					<a class="btn btn-primary js-bouquet js-sale-link hidden" data-href="/terminal/orders/bouquet/" data-open-type="popup">Сформировать букет</a>
 				</div>
 	
@@ -113,8 +146,8 @@ $this->params['breadcrumbs'][] = $this->title;
 							<span class="pull-right"><span>0</span> <i class="fa fa-rub"></i></span>
 							<input type="hidden" class="js-prepayment" name="PREPAYMENT" value="0">
 						</p>
-
-						<input type="hidden" name="CLIENT_ID" class="js-client-id-field">
+						
+						<input type="hidden" name="CLIENT_ID" class="js-client-id-field" value="<?=empty( Yii::$app->request->queryParams['CLIENT_ID'] ) ? '' : Yii::$app->request->queryParams['CLIENT_ID']?>">
 					</div>
 					<div class="clearfix"></div>
 					<div class="total js-sale-link disabled" data-href="/terminal/orders/sale/" data-open-type="popup">
@@ -127,6 +160,14 @@ $this->params['breadcrumbs'][] = $this->title;
 						</div>
 						<div class="clearfix"></div>
 					</div>
+				</div>
+
+				<div class="terminal__cart-info visible-xs">
+					<a class="btn btn-primary btn-rounded js-scroll-link" href="javascript:;" data-href="#terminal-cart">
+						<i class="fa fa-shopping-cart"></i>
+						<span class="js-cart-mobile-info m-l-sm">0</span>
+						<i class="fa fa-rub"></i>
+					</a>
 				</div>
 			</form>
 		</div>

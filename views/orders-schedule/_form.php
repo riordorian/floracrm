@@ -40,7 +40,6 @@ $moneyFieldTemplate = "<div class='form-group'>
 
     <?= $form->field($model, 'EVENT_ID')->dropDownList($arEvents, ['prompt' => 'Выберите событие', 'class' => 'js-widget chosen']); ?>
 
-    <?= $form->field($model, 'TOTAL', ['template' => $moneyFieldTemplate])->textInput(['type' => 'number']) ?>
 
     <?= $form->field($model, 'PREPAYMENT', ['template' => $moneyFieldTemplate])->textInput(['type' => 'number']) ?>
 
@@ -61,6 +60,9 @@ $moneyFieldTemplate = "<div class='form-group'>
 <!--    --><?//= $form->field($model, 'STATUS')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'COMMENT')->textarea() ?>
+
+    <?= $form->field($model, 'TYPE')->hiddenInput(['value' => 'P'])->label(false) ?>
+    <?= $form->field($model, 'STATUS')->hiddenInput(['value' => 'N'])->label(false) ?>
 
     <div class="form-group">
         <?= Html::submitButton('<i class="fa fa-check"></i>&nbsp;Сохранить', ['class' => 'btn btn-primary js-add-order', 'data-insert' => empty($bInsert) ? 0 : 1]) ?>

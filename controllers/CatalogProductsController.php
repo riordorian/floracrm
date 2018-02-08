@@ -67,8 +67,7 @@ class CatalogProductsController extends AdminController
     {
         $model = new CatalogProducts();
 
-        if ( $model->load(Yii::$app->request->post()) ) {
-            $this->saveModel($model);
+        if ( $model->load(Yii::$app->request->post()) && $this->saveModel($model) ) {
             return $this->redirect(['view', 'id' => $model->ID]);
         } else {
             return $this->render('create', [

@@ -11,7 +11,8 @@ use yii\widgets\ActiveForm;
 $form = ActiveForm::begin([
     'method' => 'post',
     'options' => [
-        'data-entity' => 'events'
+        'data-entity' => 'events',
+        'class' => 'clearfix'
     ]
 ]);?>
 
